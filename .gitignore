@@ -131,3 +131,4 @@ dmypy.json
 # Owner file
 /.vscode
 *.code-workspace
+*.ipynb
