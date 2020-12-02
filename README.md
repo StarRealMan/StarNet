@@ -4,7 +4,7 @@ Graduation Project: A deep neural network for point cloud semantic segmentation,
 # REMEMBER!
 
 ## Requirement
-* Pytorch<https://pytorch.org/>
+* Pytorch:<https://pytorch.org/>
 
 ## Usage
 
