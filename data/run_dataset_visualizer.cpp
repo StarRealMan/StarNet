@@ -1,11 +1,7 @@
-#include <Eigen/Core>
-#include <Eigen/Geometry>
-#include <opencv2/opencv.hpp>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/visualization/cloud_viewer.h>
-#include <boost/make_shared.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -36,12 +32,11 @@ int main(int argc, char* argv[])
 
     std::string line;
     float pos;
-    uchar color;
+    unsigned char color;
     pcl::PointXYZRGBA point;
-    uint i = 0;
     std::vector<pcl::PointXYZRGBA> PointVec;
 
-	while(getline(read_file, line))
+	while(std::getline(read_file, line))
 	{
         std::stringstream lineinput(line);
         lineinput >> pos;
