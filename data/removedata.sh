@@ -2,4 +2,4 @@
 
 echo "Remove all pcd data!"
 
-rm ./*.pcd
+rm ./savings/*.pcd

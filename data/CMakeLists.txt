@@ -32,6 +32,8 @@ enable_testing()
 
 ################### source and driver ######################
 
+file(MAKE_DIRECTORY "./savings")
+
 add_executable(run_dataset_visualizer
                run_dataset_visualizer.cpp)
 
