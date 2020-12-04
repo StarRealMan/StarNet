@@ -45,7 +45,7 @@ bash ./removedata.sh
 
 ### Trainer
 
-### Test
+### Tester
 
 ## Visualization
 
