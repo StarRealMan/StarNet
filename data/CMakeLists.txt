@@ -10,6 +10,9 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 ############### dependencies ######################
 
+# Eigen
+include_directories("/usr/include/eigen3")
+
 # PCL
 find_package(PCL 1.8 REQUIRED COMPONENTS common 
                                          io
