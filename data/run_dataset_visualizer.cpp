@@ -10,7 +10,7 @@
 
 int main(int argc, char* argv[])
 {
-    if(argc != 2)
+    if(argc != 3)
     {
         std::cout << "Need 2 argument for Area and Room!" << std::endl;
 
@@ -18,17 +18,19 @@ int main(int argc, char* argv[])
     }
     
     std::string Area_num = argv[1];
-    Area_num = "Area_" + Area_num;
-    std::string Room_num = argv[2];
+    std::string Area_name = "Area_" + Area_num;
+    std::string Room_name = argv[2];
 
     pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZRGBA>);
-    pcl::visualization::CloudViewer viewer("Dataset Visualizer");
     pcl::PCDWriter Pclwriter;
 
 	std::ifstream read_file;
 
-	read_file.open("../Stanford3dDataset_v1.2_Aligned_Version"
-                    + Area_num + "/" + Room_num + "/" + Room_num + ".txt", ios::binary);
+    std::cout << "File opening : ../Stanford3dDataset_v1.2_Aligned_Version/"
+                    + Area_name + "/" + Room_name + "/" + Room_name + ".txt" << std::endl;
+
+	read_file.open("../Stanford3dDataset_v1.2_Aligned_Version/"
+                    + Area_name + "/" + Room_name + "/" + Room_name + ".txt", ios::binary);
 
     std::string line;
     float pos;
@@ -64,12 +66,17 @@ int main(int argc, char* argv[])
         cloud->points[i] = PointVec[i];
     }
 
+    std::cout << "File read successfully" << std::endl;
+
+    pcl::visualization::CloudViewer viewer("Dataset Visualizer");
+    viewer.showCloud(cloud);
+
     while(!viewer.wasStopped ())
     {
 
     }
 
-    Pclwriter.write("../" + Area_num + "_" + Room_num + ".pcd",*(cloud));
+    // Pclwriter.write("../savings/" + Area_num + "_" + Room_num + ".pcd",*(cloud));
 
     return 0;
 }

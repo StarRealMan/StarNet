@@ -30,8 +30,13 @@ make
 * After generating bin file, go to {YOUR_DIRECTORY}/SSVIO/bin
 * Run following code
 ```
-./run_data_visualizer
+./run_data_visualizer {Area_num} {Room_name}
 ```
+* Run this to remove saved pcd data:
+```
+bash ./removedata.sh
+```
+
 ### Trainer
 
 ### Test
