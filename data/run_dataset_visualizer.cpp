@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 
 	std::ifstream read_file;
 
-    std::cout << "File opening : ../Stanford3dDataset_v1.2_Aligned_Version/"
+    std::cout << "Opening : ../Stanford3dDataset_v1.2_Aligned_Version/"
                     + Area_name + "/" + Room_name + "/" + Room_name + ".txt" << std::endl;
 
 	read_file.open("../Stanford3dDataset_v1.2_Aligned_Version/"
