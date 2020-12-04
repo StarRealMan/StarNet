@@ -19,6 +19,14 @@ year      : 2016
 
 ## Requirement
 * Pytorch:<https://pytorch.org/>
+* argparse:
+```
+pip install argparse
+```
+* tqdm:
+```
+pip install tqdm
+```
 * PCL:<https://pointclouds.org/>
 * Stanford3dDataset:<https://console.cloud.google.com/storage/browser/dataset_cvpr16;tab=objects?pli=1&prefix&forceOnObjectsSortingFiltering=false>
 
