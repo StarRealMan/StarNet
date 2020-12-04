@@ -24,6 +24,9 @@ year      : 2016
 
 ## Usage
 
+* Download Stanford3dDataset to {YOUR_DIRECTORY}/StarNet/data
+* Name the directory as Stanford3dDataset_v1.2_Aligned_Version
+
 ### Dataset Visualizer
 * Go to {YOUR_DIRECTORY}/StarNet/data
 * Run following code
