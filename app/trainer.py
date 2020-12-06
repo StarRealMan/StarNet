@@ -21,16 +21,16 @@ parser.add_argument('--workers', type=int, default=2, help='number of workers to
 opt = parser.parse_args()
 print(opt)
 
-dataset = ImageNet.ImageNetDataset(root=opt.dataset)
+dataset = 
 dataloader = torch.utils.data.DataLoader(dataset,shuffle=True,batch_size=opt.batchsize,num_workers=opt.workers)
 
-val_dataset = ImageNet.ImageNetDataset(root=opt.dataset,type='val')
+val_dataset = 
 valdataloader = torch.utils.data.DataLoader(val_dataset,shuffle=True,batch_size=opt.batchsize,num_workers=opt.workers)
 
 print('length of dataset: %s ; length of val dataset: %s' % (len(dataset), len(val_dataset)))
 num_batch = len(dataset) / opt.batchsize
 
-model = AlexNet.AlexNet()
+model = 
 model.cuda()
 
 if opt.modelf != 'None':
