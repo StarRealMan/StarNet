@@ -131,8 +131,9 @@ dmypy.json
 # Owner file
 /.vscode
 *.code-workspace
-*.ipynb
+/app/*.ipynb
 /data/Stanford3dDataset_v1.2_Aligned_Version
+/data/test_dataset
 /data/build
 /data/bin
 /data/*.zip
