@@ -1,10 +1,7 @@
 import os
-import sys
-import cv2
 import numpy as np
 import torch
 import torch.utils.data as data
-from tqdm import tqdm
 
 
 class S3DISDataset(data.Dataset):
@@ -38,12 +35,8 @@ class S3DISDataset(data.Dataset):
                                 lines = f.readlines()
                                 for line in lines:
                                     line_data = line.split(' ')
-                                    line_data[0] = float(line_data[0])
-                                    line_data[1] = float(line_data[1])
-                                    line_data[2] = float(line_data[2])
-                                    line_data[3] = int(float(line_data[3]))
-                                    line_data[4] = int(float(line_data[4]))
-                                    line_data[5] = int(float(line_data[5]))
+                                    for i in range(6):
+                                        line_data[i] = float(line_data[i])
                                     
                                     room_data.append(line_data)
                                     room_label.append(self.label_codes[label_name])
@@ -51,7 +44,7 @@ class S3DISDataset(data.Dataset):
                             self.points.append(room_data)
                             self.label.append(room_label)
 
-        
+    # out put data size : [BatchSize PointNum PointChannel(xyzrgb)]
     def __getitem__(self, index):
         
         points = np.array(self.points[index])
