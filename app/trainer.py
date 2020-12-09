@@ -10,7 +10,7 @@ from model import StarNet
 parser = argparse.ArgumentParser()
 parser.add_argument('--batchsize', type=int, default=8, help='input batch size')
 parser.add_argument('--nepoch', type=int, default=8, help='number of epochs to train for')
-parser.add_argument('--dataset', type=str, default='../dataset/tiny-imagenet-200/', help="dataset path")
+parser.add_argument('--dataset', type=str, default='../data/test_dataset', help="dataset path")
 parser.add_argument('--outf', type=str, default='model.pt', help='output folder')
 parser.add_argument('--modelf', type=str, default='None', help='model path')
 parser.add_argument('--workers', type=int, default=2, help='number of workers to load data')
@@ -18,14 +18,14 @@ parser.add_argument('--workers', type=int, default=2, help='number of workers to
 opt = parser.parse_args()
 print(opt)
 
-train_dataset = dataloader.S3DISDataset('../data/test_dataset')
+train_dataset = dataloader.S3DISDataset(opt.dataset)
 traindataloader = torch.utils.data.DataLoader(train_dataset,shuffle=True,batch_size=opt.batchsize,num_workers=opt.workers)
 
 # val_dataset = 
 # valdataloader = torch.utils.data.DataLoader(val_dataset,shuffle=True,batch_size=opt.batchsize,num_workers=opt.workers)
 
 print('length of dataset: %s' % (len(train_dataset)))
-num_batch = len(train_dataset) / opt.batchsize
+batch_num = len(train_dataset) / opt.batchsize
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
