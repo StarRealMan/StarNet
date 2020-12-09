@@ -55,7 +55,7 @@ for epoch in tqdm(range(opt.nepoch)):
         show_loss = show_loss + loss.item()
         if i % 100 == 0:
             # testdata
-            print('[ epoch: %d  batch: %d/%d ]  loss: %f' % (epoch,i,num_batch,show_loss,))
+            print('[ epoch: %d  batch: %d/%d ]  loss: %f' % (epoch,i,batch_num,show_loss))
             show_loss = 0
 
 torch.save(model.state_dict(),'../model'+opt.outf)
