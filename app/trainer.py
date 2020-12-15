@@ -1,6 +1,7 @@
 import sys
 sys.path.append("..")
 import torch
+import torch.nn.functional as F
 import argparse
 from tqdm import tqdm
 
@@ -49,7 +50,7 @@ for epoch in tqdm(range(opt.nepoch)):
         optimizer.zero_grad()
         model = model.train()
         pred = model(image)
-        loss = 
+        loss = F.nllloss(pred,label)
         loss.backward()
         optimizer.step()
         show_loss = show_loss + loss.item()
