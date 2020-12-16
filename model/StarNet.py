@@ -17,6 +17,7 @@ class FrameSegNet(nn.Module):
     def __init__(self):
         super(FrameSegNet, self).__init__()
 
+    # input x size : [BatchSize ]
     def forward(self, x):
         
         return x
