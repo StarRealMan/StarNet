@@ -34,6 +34,8 @@ pip install tqdm
 
 * Download Stanford3dDataset to {YOUR_DIRECTORY}/StarNet/data
 * Name the directory as Stanford3dDataset_v1.2_Aligned_Version
+* Download SUNRGBD data **For Semantic Segmentation** to {YOUR_DIRECTORY}/StarNet/data
+* Name the directory as SUNRGBD
 
 ### Dataset Visualizer
 * Go to {YOUR_DIRECTORY}/StarNet/data
@@ -45,9 +47,13 @@ cmake ..
 make
 ```
 * After generating bin file, go to {YOUR_DIRECTORY}/SSVIO/bin
-* Run following code
+* Run following code to show the room
 ```
 ./run_data_visualizer {Area_num} {Room_name}
+```
+* Run following code to show rgbd image and semantic segmentation
+```
+./run_label_viewer {test/train} {image_num}
 ```
 * Run this to remove saved pcd data:
 ```
