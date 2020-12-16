@@ -13,6 +13,10 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 # Eigen
 include_directories("/usr/include/eigen3")
 
+# OpenCV
+find_package(OpenCV 3.1 REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
+
 # PCL
 find_package(PCL 1.8 REQUIRED COMPONENTS common 
                                          io
@@ -40,6 +44,11 @@ file(MAKE_DIRECTORY "./savings")
 add_executable(run_dataset_visualizer
                run_dataset_visualizer.cpp)
 
+add_executable(run_label_viewer
+               run_label_viewer.cpp)
+
 target_link_libraries(run_dataset_visualizer
                       ${THIRD_PARTY_LIBS})
-在
+
+target_link_libraries(run_label_viewer
+                      ${THIRD_PARTY_LIBS})

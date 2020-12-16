@@ -133,8 +133,9 @@ dmypy.json
 *.code-workspace
 /app/*.ipynb
 /data/Stanford3dDataset_v1.2_Aligned_Version
+/data/SUNRGBD
 /data/test_dataset
 /data/build
 /data/bin
 /data/*.zip
-
+/.ipynb_checkpoints
