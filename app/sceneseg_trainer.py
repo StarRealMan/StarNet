@@ -31,7 +31,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
 # train process
-model = StarNet.Net()
+model = StarNet.SceneSegNet()
 
 if opt.modelf != 'None':
     model.load_state_dict(torch.load('../model'+opt.modelf))
