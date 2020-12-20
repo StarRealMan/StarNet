@@ -21,6 +21,7 @@ print(opt)
 
 train_dataset = dataloader.S3DISDataset(opt.dataset)
 traindataloader = torch.utils.data.DataLoader(train_dataset,shuffle=True,batch_size=opt.batchsize,num_workers=opt.workers)
+num_classes = 14
 
 # val_dataset = 
 # valdataloader = torch.utils.data.DataLoader(val_dataset,shuffle=True,batch_size=opt.batchsize,num_workers=opt.workers)
@@ -45,12 +46,15 @@ optimizer = torch.optim.Adam(model.parameters(),lr=0.0001,betas=(0.9, 0.999))
 for epoch in tqdm(range(opt.nepoch)):
     show_loss = 0
     for i, data in tqdm(enumerate(dataloader)):
-        label,image = data
-        label,image = label.to(device),image.to(device)
+        # out put data size : [BatchSize PointChannel(XYZRGB) PointNum]
+        label,points = data
+        label,points = label.to(device),points.to(device)
         optimizer.zero_grad()
         model = model.train()
-        pred = model(image)
-        loss = F.nllloss(pred,label)
+        pred = model(points)
+        pred = pred.view(-1, num_classes)
+        label = label.view(-1, 1)[:, 0]
+        loss = F.nll_loss(pred, label)
         loss.backward()
         optimizer.step()
         show_loss = show_loss + loss.item()

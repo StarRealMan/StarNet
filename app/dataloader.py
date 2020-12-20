@@ -45,12 +45,13 @@ class S3DISDataset(data.Dataset):
                             self.points.append(room_data)
                             self.label.append(room_label)
 
-    # out put data size : [BatchSize PointNum PointChannel(XYZRGB)]
+    # out put data size : [BatchSize PointChannel(XYZRGB) PointNum]
     def __getitem__(self, index):
         
         points = np.array(self.points[index])
         label = np.array(self.label[index])
-        
+        points.transpose((0,2,1))
+
         return points, label
         
     def __len__(self):
