@@ -11,7 +11,7 @@ from model import StarNet
 parser = argparse.ArgumentParser()
 parser.add_argument('--batchsize', type=int, default=8, help='input batch size')
 parser.add_argument('--nepoch', type=int, default=8, help='number of epochs to train for')
-parser.add_argument('--dataset', type=str, default='../data/test_dataset', help="dataset path")
+parser.add_argument('--dataset', type=str, default='../data/Stanford3dDataset_v1.2_Aligned_Version', help="dataset path")
 parser.add_argument('--outf', type=str, default='model.pt', help='output folder')
 parser.add_argument('--modelf', type=str, default='None', help='model path')
 parser.add_argument('--workers', type=int, default=2, help='number of workers to load data')
