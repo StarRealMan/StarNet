@@ -49,11 +49,14 @@ class S3DISDataset(data.Dataset):
                             self.points.append(room_data)
                             self.label.append(room_label)
 
-    # out put data size : [BatchSize PointChannel(XYZRGB) PointNum]
+    # out put data size : [BatchSize PointNum PointChannel(XYZRGB)]
     def __getitem__(self, index):
         
         points = np.array(self.points[index])
         label = np.array(self.label[index])
+        choice = np.random.choice(range(len(points)), self.pointnum)
+        points = points[choice, :]
+        label = label[choice, :]
 
         return points, label
         
