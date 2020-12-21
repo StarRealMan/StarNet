@@ -47,7 +47,7 @@ optimizer = torch.optim.Adam(model.parameters(),lr=0.0001,betas=(0.9, 0.999))
 for epoch in tqdm(range(opt.nepoch)):
     show_loss = 0
     for i, data in tqdm(enumerate(traindataloader)):
-        # out put data size : [BatchSize PointChannel(XYZRGB) PointNum]
+        # out put data size : [BatchSize PointNum PointChannel(XYZRGB)]
         points, label = data
         points = points.transpose(2, 1)
         label,points = label.to(device),points.to(device=device, dtype=torch.float)
