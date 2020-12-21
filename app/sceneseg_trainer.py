@@ -47,8 +47,9 @@ for epoch in tqdm(range(opt.nepoch)):
     show_loss = 0
     for i, data in tqdm(enumerate(traindataloader)):
         # out put data size : [BatchSize PointChannel(XYZRGB) PointNum]
-        label,points = data
-        label,points = label.to(device),points.to(device)
+        points, label = data
+        points = points.transpose(2, 1)
+        label,points = label.to(device),points.to(device=device, dtype=torch.float)
         optimizer.zero_grad()
         model = model.train()
         pred = model(points)
