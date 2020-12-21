@@ -32,7 +32,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
 # train process
-model = StarNet.SceneSegNet()
+model = StarNet.SceneSegNet(num_classes)
 
 if opt.modelf != 'None':
     model.load_state_dict(torch.load('../model'+opt.modelf))
@@ -45,7 +45,7 @@ optimizer = torch.optim.Adam(model.parameters(),lr=0.0001,betas=(0.9, 0.999))
 
 for epoch in tqdm(range(opt.nepoch)):
     show_loss = 0
-    for i, data in tqdm(enumerate(dataloader)):
+    for i, data in tqdm(enumerate(traindataloader)):
         # out put data size : [BatchSize PointChannel(XYZRGB) PointNum]
         label,points = data
         label,points = label.to(device),points.to(device)
