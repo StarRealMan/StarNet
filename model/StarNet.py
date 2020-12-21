@@ -73,7 +73,10 @@ class SceneSegNet(nn.Module):
         n_pts = x.size()[2]
         trans = self.stn(x)
         x = x.transpose(2, 1)
-        x = torch.bmm(x, trans)
+        cordx = x[:, :, :3]
+        rgbx = x[:, :, 3:]
+        cordx = torch.bmm(cordx, trans)
+        x = torch.cat((cordx,rgbx), 2)
         x = x.transpose(2, 1)
         x = F.relu(self.bn1(self.conv1(x)))
 
@@ -108,7 +111,7 @@ class FrameSegNet(nn.Module):
 
 
 if __name__ == '__main__':
-    net = SceneSegNet()
+    net = SceneSegNet(14)
     print(net)
-    rand = torch.randn(1,10,6)
+    rand = torch.randn(2,6,4096)
     print(net(rand))
