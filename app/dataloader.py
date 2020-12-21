@@ -20,7 +20,7 @@ class S3DISDataset(data.Dataset):
         for label_num, label_name_e in enumerate(self.label_names):
             self.label_codes[label_name_e] = label_num
 
-        for Area_num in range(4,6):
+        for Area_num in range(1):
             print("loading Area_" + str(Area_num+1))
             for root,dirs,files in os.walk(root_d+'/Area_'+str(Area_num+1)):
                 root_split = root.split('/')
@@ -53,7 +53,6 @@ class S3DISDataset(data.Dataset):
         
         points = np.array(self.points[index])
         label = np.array(self.label[index])
-        points.transpose((0,2,1))
 
         return points, label
         

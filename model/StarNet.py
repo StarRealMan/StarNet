@@ -8,7 +8,7 @@ class TransNet(nn.Module):
 
     def __init__(self):
         super(TransNet, self).__init__()
-        self.conv1 = torch.nn.Conv1d(3, 64, 1)
+        self.conv1 = torch.nn.Conv1d(6, 64, 1)
         self.conv2 = torch.nn.Conv1d(64, 128, 1)
         self.conv3 = torch.nn.Conv1d(128, 1024, 1)
         self.fc1 = nn.Linear(1024, 512)
@@ -51,7 +51,7 @@ class SceneSegNet(nn.Module):
 
         self.class_num = class_num;
         self.stn = TransNet()
-        self.conv1 = torch.nn.Conv1d(3, 64, 1)
+        self.conv1 = torch.nn.Conv1d(6, 64, 1)
         self.conv2 = torch.nn.Conv1d(64, 128, 1)
         self.conv3 = torch.nn.Conv1d(128, 1024, 1)
         self.conv4 = torch.nn.Conv1d(1088, 512, 1)
