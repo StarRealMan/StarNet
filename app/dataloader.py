@@ -6,7 +6,8 @@ import cv2
 
 
 class S3DISDataset(data.Dataset):
-    def __init__(self,root_d):
+    def __init__(self, root_d, pointnum):
+        self.pointnum = pointnum
         self.room_names = []
         self.label_names = ['ceiling','floor','wall','beam','column','window','door',\
                             'stairs','table','chair','sofa','bookcase','board','clutter']
@@ -20,7 +21,7 @@ class S3DISDataset(data.Dataset):
         for label_num, label_name_e in enumerate(self.label_names):
             self.label_codes[label_name_e] = label_num
 
-        for Area_num in range(6):
+        for Area_num in range(1):
             print("loading Area_" + str(Area_num+1))
             for root,dirs,files in os.walk(root_d+'/Area_'+str(Area_num+1)):
                 root_split = root.split('/')
@@ -64,7 +65,7 @@ class S3DISDataset(data.Dataset):
 
 class SUNRGBDDataset(data.Dataset):
     # I only loaded the train data in the dataset
-    def __init__(self,root_d):
+    def __init__(self, root_d):
         self.rgbdata = []
         self.depthdata = []
         self.labels = []
