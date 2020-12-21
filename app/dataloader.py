@@ -56,7 +56,7 @@ class S3DISDataset(data.Dataset):
         label = np.array(self.label[index])
         choice = np.random.choice(range(len(points)), self.pointnum)
         points = points[choice, :]
-        label = label[choice, :]
+        label = label[choice]
 
         return points, label
         

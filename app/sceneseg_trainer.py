@@ -20,15 +20,20 @@ parser.add_argument('--workers', type=int, default=2, help='number of workers to
 opt = parser.parse_args()
 print(opt)
 
+if opt.batchsize == 1:
+    print('Can not use batchsize 1, Change batchsize to 2')
+    opt.batchsize = 2
+    
 train_dataset = dataloader.S3DISDataset(opt.dataset, opt.pointnum)
-traindataloader = torch.utils.data.DataLoader(train_dataset,shuffle=True,batch_size=opt.batchsize,num_workers=opt.workers)
+traindataloader = torch.utils.data.DataLoader(train_dataset, shuffle=True, batch_size=opt.batchsize,\
+                                              num_workers=opt.workers, drop_last=True)
 num_classes = 14
 
 # val_dataset = 
 # valdataloader = torch.utils.data.DataLoader(val_dataset,shuffle=True,batch_size=opt.batchsize,num_workers=opt.workers)
 
 print('length of dataset: %s' % (len(train_dataset)))
-batch_num = len(train_dataset) / opt.batchsize
+batch_num = int(len(train_dataset) / opt.batchsize)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
@@ -60,7 +65,7 @@ for epoch in tqdm(range(opt.nepoch)):
         loss.backward()
         optimizer.step()
         show_loss = show_loss + loss.item()
-        if i % 100 == 0:
+        if i % 10 == 9:
             # testdata
             print('[ epoch: %d  batch: %d/%d ]  loss: %f' % (epoch,i,batch_num,show_loss))
             show_loss = 0
