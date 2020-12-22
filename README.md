@@ -16,6 +16,8 @@ booktitle :Proceedings of the IEEE International Conference on Computer Vision a
 year      : 2016
 
 ## REMEMBER!
+Do not try use point num more than 4096 or batch size more than 32 to train sceneseg  
+if your GPU memory is less than 12 GB 
 
 ## Requirement
 * Pytorch:<https://pytorch.org/>
