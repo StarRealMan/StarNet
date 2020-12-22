@@ -61,12 +61,38 @@ bash ./removedata.sh
 ```
 
 ### Trainer
+* Run the following code at /app/ to train your model
+```
+python sceneseg_train.py [optins]
+```
+option include:
+--batchsize for input batch size
+--pointnum for points per room/sample
+--nepoch for number of epochs to train for
+--dataset for dataset path
+--outn for output model name
+--model for history model path
+--workers for number of workers to load data
 
 ### Tester
+* Run the following code at /app/ to test the model you trained
+```
+python sceneseg_test.py [optins]
+```
+option include:
+--dataset for dataset path
+--model for history model path
+--pointnum for points per room/sample
+--outn for output file name
+--workers for number of workers to load data
 
 ## Visualization
+* While Training, it will generate loss chart at the same time.
+* Using sceneseg_test.py, just type in the room/sample num will save the result in pcd format at /data/savings 
 
 ## Bug
+Error when using test app. It predict all the pointto be 'sofa'(class 11)
+Using model trained Dec.22, 300 epoch with all Area.
 
 ## Author
 

@@ -6,7 +6,7 @@ import cv2
 
 
 class S3DISDataset(data.Dataset):
-    def __init__(self, root_d, pointnum):
+    def __init__(self, root_d, pointnum , Area_code = 5, split = 'train'):
         self.pointnum = pointnum
         self.room_names = []
         self.label_names = ['ceiling','floor','wall','beam','column','window','door',\
@@ -21,22 +21,30 @@ class S3DISDataset(data.Dataset):
         for label_num, label_name_e in enumerate(self.label_names):
             self.label_codes[label_name_e] = label_num
 
-        for Area_num in range(6):
-            print("loading Area_" + str(Area_num+1))
-            for root,dirs,files in os.walk(root_d+'/Area_'+str(Area_num+1)):
+        if split == 'train':
+            Area_range = [1, 2, 3, 4, 5, 6]
+            if Area_code != 0:
+                Area_range.pop(Area_code-1)
+
+        else:
+            Area_range = [Area_code]
+
+        for Area_num in Area_range:
+            print("loading Area_" + str(Area_num))
+            for root,dirs,files in os.walk(root_d+'/Area_'+str(Area_num)):
                 root_split = root.split('/')
                 if(root_split[-1] == 'Annotations'):
                     room_name = root_split[-2]
-                    print("loading Area_" + str(Area_num+1) +" "+ room_name)
-                    self.room_names.append('Area_'+str(Area_num+1)+room_name)
+                    print("loading Area_" + str(Area_num) +" "+ room_name)
+                    self.room_names.append('Area_'+str(Area_num)+room_name)
                     
                     room_data.clear()
                     room_label.clear()
                     for file in files:
                         label_name = file.split('_')[0]
                         if(label_name != 'Icon'):
-                            print("loading Area_" + str(Area_num+1) +" "+ room_name +" "+ file)
-                            with open(root_d+'/Area_'+str(Area_num+1)+'/'+room_name+'/Annotations/'+file, 'r') as f:                                
+                            print("loading Area_" + str(Area_num) +" "+ room_name +" "+ file)
+                            with open(root_d+'/Area_'+str(Area_num)+'/'+room_name+'/Annotations/'+file, 'r') as f:                                
                                 lines = f.readlines()
                                 for line in lines:
                                     line_data = line.split(' ')
