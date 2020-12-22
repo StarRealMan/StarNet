@@ -21,7 +21,7 @@ class S3DISDataset(data.Dataset):
         for label_num, label_name_e in enumerate(self.label_names):
             self.label_codes[label_name_e] = label_num
 
-        for Area_num in range(1):
+        for Area_num in range(6):
             print("loading Area_" + str(Area_num+1))
             for root,dirs,files in os.walk(root_d+'/Area_'+str(Area_num+1)):
                 root_split = root.split('/')
