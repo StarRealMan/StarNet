@@ -13,8 +13,8 @@ parser.add_argument('--batchsize', type=int, default=8, help='input batch size')
 parser.add_argument('--pointnum', type=int, default=4096, help='points per room/sample')
 parser.add_argument('--nepoch', type=int, default=8, help='number of epochs to train for')
 parser.add_argument('--dataset', type=str, default='../data/Stanford3dDataset_v1.2_Aligned_Version', help="dataset path")
-parser.add_argument('--outf', type=str, default='model.pt', help='output folder')
-parser.add_argument('--modelf', type=str, default='None', help='model path')
+parser.add_argument('--outn', type=str, default='model.pt', help='output model name')
+parser.add_argument('--model', type=str, default='None', help='history model path')
 parser.add_argument('--workers', type=int, default=2, help='number of workers to load data')
 
 opt = parser.parse_args()
@@ -40,9 +40,9 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 # train process
 model = StarNet.SceneSegNet(num_classes)
 
-if opt.modelf != 'None':
-    model.load_state_dict(torch.load('../model'+opt.modelf))
-    print('Use model from'+opt.modelf)
+if opt.model != 'None':
+    model.load_state_dict(torch.load('../model'+opt.model))
+    print('Use model from'+opt.model)
 else:
     print('Use new model')
 
@@ -70,5 +70,5 @@ for epoch in tqdm(range(opt.nepoch)):
             print('[ epoch: %d  batch: %d/%d ]  loss: %f' % (epoch,i,batch_num,show_loss))
             show_loss = 0
 
-torch.save(model.state_dict(),'../model'+opt.outf)
-print('Model saved at'+opt.outf)
+torch.save(model.state_dict(), '../model' + opt.outn)
+print('Model saved at../model' + opt.outn)
