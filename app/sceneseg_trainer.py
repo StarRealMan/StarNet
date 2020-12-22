@@ -49,9 +49,8 @@ else:
 model.to(device)
 optimizer = torch.optim.Adam(model.parameters(),lr=0.0001,betas=(0.9, 0.999))
 
-for epoch in range(opt.nepoch):
-    show_loss = 0
-    for i, data in enumerate(traindataloader):
+for epoch in tqdm(range(opt.nepoch)):
+    for i, data in tqdm(enumerate(traindataloader)):
         # out put data size : [BatchSize PointNum PointChannel(XYZRGB)]
         points, label = data
         points = points.transpose(2, 1)
@@ -64,11 +63,9 @@ for epoch in range(opt.nepoch):
         loss = F.nll_loss(pred, label)
         loss.backward()
         optimizer.step()
-        show_loss = show_loss + loss.item()
-        if i % 10 == 9:
-            # testdata
-            print('[ epoch: %d/%d  batch: %d/%d ]  loss: %f' % (epoch, opt.nepoch, i, batch_num, show_loss))
-            show_loss = 0
+        # testdata
+        print('[ epoch: %d/%d  batch: %d/%d ]  loss: %f' % (epoch, opt.nepoch, i, batch_num, loss.item()))
+        show_loss = 0
 
 torch.save(model.state_dict(), '../model' + opt.outn)
 print('Model saved at../model' + opt.outn)
