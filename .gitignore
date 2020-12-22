@@ -139,3 +139,4 @@ dmypy.json
 /data/bin
 /data/*.zip
 /.ipynb_checkpoints
+/model/*.pt
