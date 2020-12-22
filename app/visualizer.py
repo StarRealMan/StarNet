@@ -72,7 +72,7 @@ def MakePCD(points, pred, save_path):
         f.writelines('POINTS '+str(len(points))+'\n')
         f.writelines('DATA ascii\n')
         for i, point in enumerate(points):
-            f.writelines(str(point[0])+' '+str(point[1])+' '+str(point[2])+' '+str(Type2Color(pred[i]))+'\n')
+            f.writelines(str(point[0].item())+' '+str(point[1].item())+' '+str(point[2].item())+' '+str(Type2Color(pred[i]))+'\n')
 
 def calIOU(pred, label):
     correct_num = 0

@@ -13,11 +13,12 @@ parser.add_argument('--model', type=str, default='model.pt', help='history model
 parser.add_argument('--pointnum', type=int, default=4096, help='points per room/sample')
 parser.add_argument('--outn', type=str, default='test.pcd', help='output file name')
 parser.add_argument('--workers', type=int, default=2, help='number of workers to load data')
+parser.add_argument('--testarea', type=int, default=5, help='Area you want to test with (skip while training)')
 
 opt = parser.parse_args()
 print(opt)
 
-test_dataset = dataloader.S3DISDataset(opt.dataset, opt.pointnum, 3, split = 'test')
+test_dataset = dataloader.S3DISDataset(opt.dataset, opt.pointnum, opt.testarea, split = 'test')
 testdataloader = torch.utils.data.DataLoader(test_dataset, shuffle=False, batch_size = 1,\
                                               num_workers=opt.workers, drop_last=False)
 
@@ -55,6 +56,7 @@ with torch.no_grad():
         IOU.append(visualizer.calIOU(pred, label))
         if i in genlist:
             visualizer.MakePCD(points, pred, str(i)+opt.outn)
+            print('saving visualization file' + str(i)+opt.outn)
         
 print('test data iou is as followed:')
 print(IOU)

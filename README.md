@@ -74,7 +74,8 @@ option include:
 --dataset for dataset path  
 --outn for output model name  
 --model for history model path  
---workers for number of workers to load data
+--workers for number of workers to load data  
+--testarea for Area you want to test with (skip while training)
 
 ### Tester
 * Run the following code at /app/ to test the model you trained
@@ -86,7 +87,8 @@ option include:
 --model for history model path  
 --pointnum for points per room/sample  
 --outn for output file name  
---workers for number of workers to load data
+--workers for number of workers to load data  
+--testarea for Area you want to test with (skip while training)
 
 ## Visualization
 * While Training, it will generate loss chart at the same time.
