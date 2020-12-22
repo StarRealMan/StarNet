@@ -17,6 +17,7 @@ parser.add_argument('--dataset', type=str, default='../data/Stanford3dDataset_v1
 parser.add_argument('--outn', type=str, default='model.pt', help='output model name')
 parser.add_argument('--model', type=str, default='None', help='history model path')
 parser.add_argument('--workers', type=int, default=2, help='number of workers to load data')
+parser.add_argument('--testarea', type=int, default=5, help='Area you want to test with (skip while training)')
 
 opt = parser.parse_args()
 print(opt)
@@ -25,7 +26,7 @@ if opt.batchsize == 1:
     print('Can not use batchsize 1, Change batchsize to 2')
     opt.batchsize = 2
     
-train_dataset = dataloader.S3DISDataset(opt.dataset, opt.pointnum, 5, split = 'train')
+train_dataset = dataloader.S3DISDataset(opt.dataset, opt.pointnum, opt.testarea, split = 'train')
 traindataloader = torch.utils.data.DataLoader(train_dataset, shuffle=True, batch_size=opt.batchsize,\
                                               num_workers=opt.workers, drop_last=True)
 num_classes = 14
