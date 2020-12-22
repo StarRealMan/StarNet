@@ -41,8 +41,8 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 model = StarNet.SceneSegNet(num_classes)
 
 if opt.model != 'None':
-    model.load_state_dict(torch.load('../model'+opt.model))
-    print('Use model from'+opt.model)
+    model.load_state_dict(torch.load('../model/'+opt.model))
+    print('Use model from ../model/' + opt.model)
 else:
     print('Use new model')
 
@@ -64,8 +64,8 @@ for epoch in tqdm(range(opt.nepoch)):
         loss.backward()
         optimizer.step()
         # testdata
-        print('[ epoch: %d/%d  batch: %d/%d ]  loss: %f' % (epoch, opt.nepoch, i, batch_num, loss.item()))
+        print('[ epoch: %d/%d  batch: %d/%d ]  loss: %f' % (epoch, opt.nepoch, i+1, batch_num, loss.item()))
         show_loss = 0
 
-torch.save(model.state_dict(), '../model' + opt.outn)
-print('Model saved at../model' + opt.outn)
+torch.save(model.state_dict(), '../model/' + opt.outn)
+print('Model saved at../model/' + opt.outn)
