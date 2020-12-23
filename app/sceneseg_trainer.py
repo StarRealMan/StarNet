@@ -14,8 +14,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--batchsize', type=int, default=8, help='input batch size')
 parser.add_argument('--pointnum', type=int, default=4096, help='points per room/sample')
 parser.add_argument('--nepoch', type=int, default=8, help='number of epochs to train for')
-parser.add_argument('--dataset', type=str, default='../data/Stanford3dDataset_v1.2_Aligned_Version', help='dataset pat')
-parser.add_argument('--outn', type=str, default='model.pt', help='output model name')
+parser.add_argument('--dataset', type=str, default='../data/Stanford3dDataset_v1.2_Aligned_Version', help='dataset patH')
+parser.add_argument('--outn', type=str, default='Smodel.pt', help='output model name')
 parser.add_argument('--model', type=str, default='None', help='history model path')
 parser.add_argument('--workers', type=int, default=2, help='number of workers to load data')
 parser.add_argument('--testarea', type=int, default=5, help='Area you want to test with (skip while training)')
@@ -33,10 +33,10 @@ traindataloader = torch.utils.data.DataLoader(train_dataset, shuffle=True, batch
 num_classes = 14
 
 # val_dataset = 
-# valdataloader = torch.utils.data.DataLoader(val_dataset,shuffle=True,batch_size=opt.batchsize,num_workers=opt.workers)
+# valdataloader = 
 
 # dataplotter = visualizer.DataPlotter()
-writer = SummaryWriter('../log')
+writer = SummaryWriter('../log/scene')
 
 print('length of dataset: %s' % (len(train_dataset)))
 batch_num = int(len(train_dataset) / opt.batchsize)
@@ -60,7 +60,7 @@ for epoch in tqdm(range(opt.nepoch)):
         # out put data size : [BatchSize PointNum PointChannel(XYZRGB)]
         points, label = data
         points = points.transpose(2, 1)
-        label,points = label.to(device),points.to(device=device, dtype=torch.float)
+        points, label = points.to(device=device, dtype=torch.float), label.to(device)
         optimizer.zero_grad()
         model = model.train()
         pred = model(points)
