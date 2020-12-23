@@ -56,7 +56,7 @@ class S3DISDataset(data.Dataset):
                         label_name = file.split('_')[0]
                         if(label_name != 'Icon'):
                             print("loading Area_" + str(Area_num) +" "+ room_name +" "+ file)
-                            with open(root_d+'/Area_'+str(Area_num)+'/'+room_name+'/Annotations/'+file, 'r') as f:                                
+                            with open(root_d+'/Area_'+str(Area_num)+'/'+room_name+'/Annotations/'+file, 'r') as f:
                                 lines = f.readlines()
                                 
                                 # lodaing point
