@@ -137,6 +137,7 @@ dmypy.json
 /data/test_dataset
 /data/build
 /data/bin
+/data/savings
 /data/*.zip
 /.ipynb_checkpoints
 /model/*.pt
