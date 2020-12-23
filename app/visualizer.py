@@ -7,20 +7,28 @@ class DataPlotter:
         self.xdata = []
         self.ydata = []
         plt.ion()
+        fig = plt.figure(figsize=(8,6))
+        self.axes = fig.add_subplot(111)
+        self.line, = self.axes.plot([],[])
 
     def DataloadXY(self, x, y):
         self.xdata.append(x)
         self.ydata.append(y)
+        self.line.set_ydata(self.ydata)
+        self.line.set_xdata(self.xdata)
 
     def DataloadY(self, y):
         self.xdata.append(len(self.xdata))
         self.ydata.append(y)
-        
+        self.line.set_ydata(self.ydata)
+        self.line.set_xdata(self.xdata)
 
     def DataPlot(self):
-        plt.clf()
-        plt.plot(self.xdata, self.ydata)
-        plt.show()
+        if len(self.ydata)>0:
+            self.axes.set_ylim(min(self.ydata),max(self.ydata)+1)
+            self.axes.set_xlim(min(self.xdata),max(self.xdata)+1)
+        plt.title(str(self.ydata[i]))
+        plt.draw()
 
 
 def Type2Color(pred):
@@ -72,7 +80,8 @@ def MakePCD(points, pred, save_path):
         f.writelines('POINTS '+str(len(points))+'\n')
         f.writelines('DATA ascii\n')
         for i, point in enumerate(points):
-            f.writelines(str(point[0].item())+' '+str(point[1].item())+' '+str(point[2].item())+' '+str(Type2Color(pred[i]))+'\n')
+            f.writelines(str(point[0].item())+' '+str(point[1].item())+' '+ \
+                         str(point[2].item())+' '+str(Type2Color(pred[i]))+'\n')
 
 def calIOU(pred, label):
     correct_num = 0
@@ -84,12 +93,12 @@ def calIOU(pred, label):
 
 if __name__ == '__main__':
     
-    # dataplotter = DataPlotter()
-    # for i in range(50):
-    #     dataplotter.DataloadY(i**2)
-    #     dataplotter.DataPlot()
-    #     plt.pause(0.1)
-    
-    points = np.random.randn(10,3)
-    labels = [0,1,2,3,4,5,6,7,8,9]
-    MakePCD(points,labels,'test.pcd')
+    dataplotter = DataPlotter()
+    for i in range(50):
+        dataplotter.DataloadY(i**2)
+        dataplotter.DataPlot()
+        plt.pause(1)
+
+    # points = np.random.randn(10,3)
+    # labels = [0,1,2,3,4,5,6,7,8,9]
+    # MakePCD(points,labels,'test.pcd')

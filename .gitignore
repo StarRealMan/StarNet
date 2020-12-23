@@ -139,5 +139,6 @@ dmypy.json
 /data/bin
 /data/savings/*
 /data/*.zip
+/log/*
 /.ipynb_checkpoints
 /model/*.pt

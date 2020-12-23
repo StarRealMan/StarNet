@@ -22,13 +22,12 @@ test_dataset = dataloader.S3DISDataset(opt.dataset, opt.pointnum, opt.testarea, 
 testdataloader = torch.utils.data.DataLoader(test_dataset, shuffle=False, batch_size = 1,\
                                               num_workers=opt.workers, drop_last=False)
 
-dataset_len = test_dataset.__len__()
+dataset_len = len(test_dataset)
 num_classes = 14
 
 model = StarNet.SceneSegNet(num_classes)
 model.load_state_dict(torch.load('../model/'+opt.model))
 print('Use model from ../model/' + opt.model)
-model = model.eval()
 
 IOU = []
 genlist = []
@@ -48,6 +47,7 @@ with torch.no_grad():
         points = points.to(dtype=torch.float)
         netpoints = points.transpose(2, 1)
         points = points.view(-1,6)[:, :3]
+        model = model.eval()
         pred = model(netpoints)
         pred = pred.view(-1, num_classes)
         pred = torch.max(pred, 1)[1]
