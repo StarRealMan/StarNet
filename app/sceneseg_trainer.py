@@ -69,7 +69,7 @@ for epoch in tqdm(range(opt.nepoch)):
         optimizer.step()
         # testdata
         print('[ epoch: %d/%d  batch: %d/%d ]  loss: %f' % (epoch, opt.nepoch, i+1, batch_num, loss.item()))
-        dataplotter.DataloadY(loss.item)
+        dataplotter.DataloadY(loss.item())
         dataplotter.DataPlot()
 
 torch.save(model.state_dict(), '../model/' + opt.outn)
