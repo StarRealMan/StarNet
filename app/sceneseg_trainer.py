@@ -27,7 +27,7 @@ if opt.batchsize == 1:
     print('Can not use batchsize 1, Change batchsize to 2')
     opt.batchsize = 2
     
-train_dataset = dataloader.S3DISDataset(opt.dataset, opt.pointnum, opt.testarea, split = 'train')
+train_dataset = dataloader.S3DISDataset(opt.dataset, opt.pointnum, opt.testarea, split = 'test')
 traindataloader = torch.utils.data.DataLoader(train_dataset, shuffle=True, batch_size=opt.batchsize,\
                                               num_workers=opt.workers, drop_last=True)
 num_classes = 14
@@ -65,7 +65,6 @@ for epoch in tqdm(range(opt.nepoch)):
         model = model.train()
         pred = model(points)
         pred = pred.view(-1, num_classes)
-        print(torch.max(pred, 1)[1])
         label = label.view(-1)
         loss = F.nll_loss(pred, label)
         loss.backward()
@@ -77,4 +76,4 @@ for epoch in tqdm(range(opt.nepoch)):
         writer.add_scalar('training loss', loss.item(), epoch*len(traindataloader)+i)
 
 torch.save(model.state_dict(), '../model/' + opt.outn)
-print('Model saved at../model/' + opt.outn)
+print('Model saved at ../model/' + opt.outn)

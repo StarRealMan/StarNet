@@ -1,8 +1,16 @@
+import sys
+
+from numpy.testing._private.utils import nulp_diff
+sys.path.append("..")
 import os
 import numpy as np
 import torch
 import torch.utils.data as data
 import cv2
+import argparse
+
+from app import visualizer
+from app import dataloader
 
 
 class S3DISDataset(data.Dataset):
@@ -29,42 +37,50 @@ class S3DISDataset(data.Dataset):
         else:
             Area_range = [Area_code]
 
+        # lodaing area
         for Area_num in Area_range:
             print("loading Area_" + str(Area_num))
+
+            # loading room
             for root,dirs,files in os.walk(root_d+'/Area_'+str(Area_num)):
                 root_split = root.split('/')
                 if(root_split[-1] == 'Annotations'):
                     room_name = root_split[-2]
                     print("loading Area_" + str(Area_num) +" "+ room_name)
-                    self.room_names.append('Area_'+str(Area_num)+room_name)
-                    
+                    self.room_names.append('Area_'+str(Area_num)+" "+room_name)
                     room_data.clear()
                     room_label.clear()
+
+                    # loading annotation
                     for file in files:
                         label_name = file.split('_')[0]
                         if(label_name != 'Icon'):
                             print("loading Area_" + str(Area_num) +" "+ room_name +" "+ file)
                             with open(root_d+'/Area_'+str(Area_num)+'/'+room_name+'/Annotations/'+file, 'r') as f:                                
                                 lines = f.readlines()
+                                
+                                # lodaing point
                                 for line in lines:
                                     line_data = line.split(' ')
+
+                                    # lodaing number
                                     for i in range(6):
                                         line_data[i] = float(line_data[i])
                                     
                                     room_data.append(line_data)
                                     room_label.append(self.label_codes[label_name])
-
-                            self.points.append(room_data)
-                            self.label.append(room_label)
+                                    
+                    np_room_data = np.array(room_data)
+                    np_room_label = np.array(room_label)
+                    choice = np.random.choice(range(len(np_room_data)), self.pointnum)
+                    self.points.append(np_room_data[choice, :])
+                    self.label.append(np_room_label[choice])
 
     # out put data size : [BatchSize PointNum PointChannel(XYZRGB)]
     def __getitem__(self, index):
         
-        points = np.array(self.points[index])
-        label = np.array(self.label[index])
-        choice = np.random.choice(range(len(points)), self.pointnum)
-        points = points[choice, :]
-        label = label[choice]
+        points = self.points[index]
+        label = self.label[index]
 
         return points, label
         
@@ -114,26 +130,48 @@ class SUNRGBDDataset(data.Dataset):
 
         return len(self.labels)
 
-if __name__ == '__main__':
-    # dataset = S3DISDataset('../data/Stanford3dDataset_v1.2_Aligned_Version')
-    # dataset = S3DISDataset('../data/test_dataset')
-    # dataloader = torch.utils.data.DataLoader(dataset,shuffle=True,batch_size=1,num_workers=4)
 
+def GroundTruth(pointnum, testarea):
+    test_dataset = S3DISDataset('../data/Stanford3dDataset_v1.2_Aligned_Version', pointnum, testarea, split = 'test')
+    testdataloader = torch.utils.data.DataLoader(test_dataset, shuffle=False, batch_size = 1,\
+                                                num_workers=8, drop_last=False)
+
+    if not os.path.exists('../data/savings/'+str(testarea)+'_GT/'):
+        os.makedirs('../data/savings/'+str(testarea)+'_GT/')
+
+    for i, data in enumerate(testdataloader):
+        points, label = data
+        points = points.to(dtype=torch.float)
+        points = points.view(-1,6)[:, :3]
+        label = label.view(-1)
+        
+        visualizer.MakePCD(points, label, str(testarea)+'_GT/'+str(i)+'gt.pcd')
+        print('saving visualization file in ' + str(testarea)+ '_GT/' + str(i) + '_' + 'gt.pcd')
+    
+
+    # for i in range(test_dataset.__len__()):
+    #     points, label = test_dataset.__getitem__(i)
+    #     points = points[:, :3]
+        
+    #     visualizer.MakePCD(points, label, str(testarea)+'_GT/'+str(i)+'gt.pcd')
+    #     print('saving visualization file in ' + str(testarea)+ '_GT/' + str(i) + '_' + 'gt.pcd')
+    
+
+if __name__ == '__main__':
+
+    GroundTruth(8192, 5)
+    
+    
+
+    # dataset = SUNRGBDDataset('../data/SUNRGBD')
+    # dataloader = torch.utils.data.DataLoader(dataset,shuffle=True,batch_size=1,num_workers=4)
     # for i, data in enumerate(dataloader):
-    #     points,label = data
-    #     print(points)
+    #     rgb,depth,label = data
+    #     print(rgb)
+    #     print(depth)
     #     print(label)
     #     break;
 
-    dataset = SUNRGBDDataset('../data/SUNRGBD')
-    dataloader = torch.utils.data.DataLoader(dataset,shuffle=True,batch_size=1,num_workers=4)
-    for i, data in enumerate(dataloader):
-        rgb,depth,label = data
-        print(rgb)
-        print(depth)
-        print(label)
-        break;
 
-
-    print(dataset.__getitem__(0))
-    print(len(dataset))
+    # print(dataset.__getitem__(0))
+    # print(len(dataset))
