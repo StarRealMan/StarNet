@@ -56,7 +56,7 @@ with torch.no_grad():
         IOU.append(visualizer.calIOU(pred, label))
         if i in genlist:
             visualizer.MakePCD(points, pred, str(i)+opt.outn)
-            print('saving visualization file' + str(i)+opt.outn)
+            print('saving visualization file' + str(i) + '_' + opt.outn)
         
 print('test data iou is as followed:')
 print(IOU)
