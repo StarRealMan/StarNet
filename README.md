@@ -29,6 +29,12 @@ pip install argparse
 ```
 pip install tqdm
 ```
+* matplotlib
+* TensorboardX
+```
+pip install tensorboardX
+pip install tensorboard
+```
 * PCL:<https://pointclouds.org/>
 * Stanford3dDataset:<https://console.cloud.google.com/storage/browser/dataset_cvpr16;tab=objects?pli=1&prefix&forceOnObjectsSortingFiltering=false>
 

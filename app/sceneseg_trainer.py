@@ -2,6 +2,7 @@ import sys
 sys.path.append("..")
 import torch
 import torch.nn.functional as F
+from torch.utils.tensorboard import SummaryWriter
 import argparse
 from tqdm import tqdm
 
@@ -34,7 +35,8 @@ num_classes = 14
 # val_dataset = 
 # valdataloader = torch.utils.data.DataLoader(val_dataset,shuffle=True,batch_size=opt.batchsize,num_workers=opt.workers)
 
-dataplotter = visualizer.DataPlotter()
+# dataplotter = visualizer.DataPlotter()
+writer = SummaryWriter('../log')
 
 print('length of dataset: %s' % (len(train_dataset)))
 batch_num = int(len(train_dataset) / opt.batchsize)
@@ -63,14 +65,16 @@ for epoch in tqdm(range(opt.nepoch)):
         model = model.train()
         pred = model(points)
         pred = pred.view(-1, num_classes)
+        print(torch.max(pred, 1)[1])
         label = label.view(-1)
         loss = F.nll_loss(pred, label)
         loss.backward()
         optimizer.step()
         # testdata
         print('[ epoch: %d/%d  batch: %d/%d ]  loss: %f' % (epoch, opt.nepoch, i+1, batch_num, loss.item()))
-        dataplotter.DataloadY(loss.item())
-        dataplotter.DataPlot()
+        # dataplotter.DataloadY(loss.item())
+        # dataplotter.DataPlot()
+        writer.add_scalar('training loss', loss.item(), epoch*len(traindataloader)+i)
 
 torch.save(model.state_dict(), '../model/' + opt.outn)
 print('Model saved at../model/' + opt.outn)

@@ -136,4 +136,4 @@ if __name__ == '__main__':
 
 
     print(dataset.__getitem__(0))
-    print(dataset.__len__())
+    print(len(dataset))
