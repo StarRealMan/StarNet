@@ -27,7 +27,7 @@ if opt.batchsize == 1:
     print('Can not use batchsize 1, Change batchsize to 2')
     opt.batchsize = 2
     
-train_dataset = dataloader.S3DISDataset(opt.dataset, opt.pointnum, opt.testarea, split = 'test')
+train_dataset = dataloader.S3DISDataset(opt.dataset, opt.pointnum, opt.testarea, split = 'train')
 traindataloader = torch.utils.data.DataLoader(train_dataset, shuffle=True, batch_size=opt.batchsize,\
                                               num_workers=opt.workers, drop_last=True)
 num_classes = 14
