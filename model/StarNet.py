@@ -100,7 +100,7 @@ class SceneSegNet(nn.Module):
 
 class FrameSegNet(nn.Module):
 
-    def __init__(self):
+    def __init__(self, num_class):
         super(FrameSegNet, self).__init__()
 
     # input x size : [BatchSize ]
