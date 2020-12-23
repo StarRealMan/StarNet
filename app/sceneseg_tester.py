@@ -30,16 +30,6 @@ model.load_state_dict(torch.load('../model/'+opt.model))
 print('Use model from ../model/' + opt.model)
 
 IOU = []
-genlist = []
-while(1):
-    samplenum = input("Input test samplenum：")
-    samplenum = int(samplenum)
-    if  samplenum == -1:
-        break;
-    elif samplenum >= dataset_len or samplenum < 0:
-        print('test samplenum Out of bound')
-    else:
-        genlist.append(samplenum)
 
 with torch.no_grad():
     for i, data in enumerate(testdataloader):
@@ -54,9 +44,8 @@ with torch.no_grad():
         label = label.view(-1)
         
         IOU.append(visualizer.calIOU(pred, label))
-        if i in genlist:
-            visualizer.MakePCD(points, pred, str(i)+opt.outn)
-            print('saving visualization file' + str(i) + '_' + opt.outn)
+        visualizer.MakePCD(points, pred, str(i)+opt.outn)
+        print('saving visualization file' + str(i) + '_' + opt.outn)
         
 print('test data iou is as followed:')
 print(IOU)
