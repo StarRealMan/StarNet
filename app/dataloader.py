@@ -72,15 +72,17 @@ class S3DISDataset(data.Dataset):
                                     
                     np_room_data = np.array(room_data)
                     np_room_label = np.array(room_label)
-                    choice = np.random.choice(range(len(np_room_data)), self.pointnum)
-                    self.points.append(np_room_data[choice, :])
-                    self.label.append(np_room_label[choice])
+                    self.points.append(np_room_data)
+                    self.label.append(np_room_label)
 
     # out put data size : [BatchSize PointNum PointChannel(XYZRGB)]
     def __getitem__(self, index):
         
         points = self.points[index]
         label = self.label[index]
+        choice = np.random.choice(range(len(points)), self.pointnum)
+        points = points[choice, :]
+        label = label[choice]
 
         return points, label
         
@@ -124,6 +126,7 @@ class SUNRGBDDataset(data.Dataset):
 
     # out put data size : [BatchSize Channel(RGB or Depth) Image_Height Image_Width]
     def __getitem__(self, index):
+
         rgb = self.rgbdata[index]
         depth = self.depthdata[index]
         label = self.labels[index]
@@ -135,7 +138,7 @@ class SUNRGBDDataset(data.Dataset):
         return len(self.labels)
 
 
-def GroundTruth(pointnum, testarea):
+def GenGroundTruth(pointnum, testarea):
     test_dataset = S3DISDataset('../data/Stanford3dDataset_v1.2_Aligned_Version', pointnum, testarea, split = 'test')
     testdataloader = torch.utils.data.DataLoader(test_dataset, shuffle=False, batch_size = 1,\
                                                 num_workers=8, drop_last=False)
@@ -163,7 +166,7 @@ def GroundTruth(pointnum, testarea):
 
 if __name__ == '__main__':
 
-    # GroundTruth(8192, 5)
+    #  GenGroundTruth(8192, 1)
     
     dataset = SUNRGBDDataset('../data/SUNRGBD', 'train')
     dataloader = torch.utils.data.DataLoader(dataset, shuffle=True, batch_size=1,\
