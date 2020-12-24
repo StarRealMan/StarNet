@@ -24,9 +24,13 @@ int main(int argc, char** argv)
     {
         file_name += "test_labels/img13labels-" + image_str + ".png";
     }
-    else
+    else if(!strcmp(argv[1],"train"))
     {
         file_name += "train_labels/img13labels-" + image_str + ".png";
+    }
+    else
+    {
+        file_name = './savings/F_TEST/'+std::stoi(argv[2])+'_test.jpg';
     }
     
     cv::Mat label_pic = cv::imread(file_name, cv::IMREAD_GRAYSCALE);
@@ -50,15 +54,18 @@ int main(int argc, char** argv)
         image_str = argv[2];
         Depth = cv::imread("../SUNRGBD/test_dataset/depth/" + image_str + ".png");
     }
-    else
+    else if(!strcmp(argv[1],"train"))
     {
         RGB = cv::imread("../SUNRGBD/train_dataset/rgb/img-" + image_str + ".jpg");
         image_str = argv[2];
         Depth = cv::imread("../SUNRGBD/train_dataset/depth/" + image_str + ".png");
     }
 
-    cv::imshow("RGB", RGB);
-    cv::imshow("Depth",Depth);
+    if(strcmp(argv[1],"eval"))
+    {
+        cv::imshow("RGB", RGB);
+        cv::imshow("Depth",Depth);
+    }
     cv::imshow("Label", show_pic);
 
     cv::waitKey(0);

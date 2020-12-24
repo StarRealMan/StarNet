@@ -21,9 +21,9 @@ parser.add_argument('--workers', type=int, default=2, help='number of workers to
 opt = parser.parse_args()
 print(opt)
 
-# if opt.batchsize == 1:
-#     print('Can not use batchsize 1, Change batchsize to 2')
-#     opt.batchsize = 2
+if opt.batchsize == 1:
+    print('Can not use batchsize 1, Change batchsize to 2')
+    opt.batchsize = 2
 
 train_dataset = dataloader.SUNRGBDDataset('../data/SUNRGBD', 'train')
 traindataloader = torch.utils.data.DataLoader(train_dataset, shuffle=True, batch_size=opt.batchsize,\
@@ -59,14 +59,15 @@ for epoch in tqdm(range(opt.nepoch)):
         # out put data size : [BatchSize Channel(RGB or Depth) Image_Height Image_Width]
         rgb, depth, label = data
         rgb, depth, label = rgb.to(device=device, dtype=torch.float), depth.to(device=device, dtype=torch.float),\
-                                                                      label.to(device)
+                                                                      label.to(device=device, dtype=torch.long)
+        rgb = rgb/255
+        depth = depth/255
         optimizer.zero_grad()
         model = model.train()
         # rgb, depth pre process
         result = torch.cat((rgb,depth), 1)
         pred = model(result)
-        pred = pred.transpose(2, 1)
-        pred = pred.transpose(3, 2)
+        pred = pred.transpose(2, 1).transpose(3, 2).contiguous()
         pred = pred.view(-1, num_classes)
         label = label.view(-1)
         loss = F.nll_loss(pred, label)

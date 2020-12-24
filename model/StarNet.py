@@ -130,7 +130,7 @@ class FrameSegNet(nn.Module):
         xlevel3 = self.pool(self.relu(self.bn3(self.conv3(xlevel2))))       # Image Size : 30 x 40
         sumlevel2 = self.relu(self.bn4(self.deconv1(xlevel3))) + xlevel2    # Image Size : 60 x 80
         sumlevel1 = self.relu(self.bn5(self.deconv2(sumlevel2))) + xlevel1  # Image Size : 120 x 160
-        outx = self.relu(self.deconv3(sumlevel1))                           # Image Size : 240 x 320
+        outx = F.log_softmax(self.deconv3(sumlevel1), dim=1)                # Image Size : 240 x 320
 
     # onput x size : [BatchSize ClassNum Image_Height Image_Width]
         return outx
