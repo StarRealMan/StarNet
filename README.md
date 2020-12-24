@@ -21,7 +21,7 @@ year      : 2016
 ![color.png](https://github.com/StarRealMan/StarNet/blob/main/images/color.png?raw=true)
 * ground truth  
 ![gt.png](https://github.com/StarRealMan/StarNet/blob/main/images/gt.png?raw=true)
-* net test result using Area_5 and a net trained 300 epoches  
+* net test result (batchsize:8, epoches:300, points:32768, testarea:Area_5)  
 ![test.png](https://github.com/StarRealMan/StarNet/blob/main/images/test.png?raw=true)
 
 ## REMEMBER!
@@ -81,6 +81,7 @@ bash ./removedata.sh
 * Run the following code at /app/ to train your model
 ```
 python sceneseg_train.py [optins]
+python frame_train.py [optins]
 ```
 option include:
 --batchsize for input batch size  
@@ -96,6 +97,7 @@ option include:
 * Run the following code at /app/ to test the model you trained
 ```
 python sceneseg_test.py [optins]
+python frame_test.py [optins]
 ```
 option include:
 --dataset for dataset path  
@@ -106,8 +108,9 @@ option include:
 --testarea for Area you want to test with (skip while training)
 
 ## Visualization
-* While Training, it will generate loss chart at the same time.
-* Using sceneseg_test.py, just type in the room/sample num will save the result in pcd format at /data/savings 
+* While Training, it will generate loss chart at the same time
+* Using sceneseg_test.py, just type in the room/sample num will save the result in pcd format at /data/savings
+* Using tensorboard (logdir = /log) to watch the loss curve
 
 ## Bug
 Error when using test app. It predict all the pointto be 'sofa'(class 11)  
