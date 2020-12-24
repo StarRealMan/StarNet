@@ -124,16 +124,18 @@ class FrameSegNet(nn.Module):
 
     # input x size : [BatchSize Channel(Processed: 4) Image_Height Image_Width]
     def forward(self, x):
-                                                                            # Image Size : 240 x 320 (Initial)
-        xlevel1 = self.pool(self.relu(self.bn1(self.conv1(x))))             # Image Size : 120 x 160
-        xlevel2 = self.pool(self.relu(self.bn2(self.conv2(xlevel1))))       # Image Size : 60 x 80
-        xlevel3 = self.pool(self.relu(self.bn3(self.conv3(xlevel2))))       # Image Size : 30 x 40
-        sumlevel2 = self.relu(self.bn4(self.deconv1(xlevel3))) + xlevel2    # Image Size : 60 x 80
-        sumlevel1 = self.relu(self.bn5(self.deconv2(sumlevel2))) + xlevel1  # Image Size : 120 x 160
-        outx = F.log_softmax(self.deconv3(sumlevel1), dim=1)                # Image Size : 240 x 320
+                                                                # Image Size : 240 x 320 (Initial)
+        x = self.pool(self.relu(self.bn1(self.conv1(x))))       # Image Size : 120 x 160
+        xlevel1 = x
+        x = self.pool(self.relu(self.bn2(self.conv2(x))))       # Image Size : 60 x 80
+        xlevel2 = x
+        x = self.pool(self.relu(self.bn3(self.conv3(x))))       # Image Size : 30 x 40
+        x = self.relu(self.bn4(self.deconv1(x))) + xlevel2      # Image Size : 60 x 80
+        x = self.relu(self.bn5(self.deconv2(x))) + xlevel1      # Image Size : 120 x 160
+        x = F.log_softmax(self.deconv3(x), dim=1)               # Image Size : 240 x 320
 
     # onput x size : [BatchSize ClassNum Image_Height Image_Width]
-        return outx
+        return x
 
 
 if __name__ == '__main__':
