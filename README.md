@@ -15,6 +15,15 @@ booktitle :Proceedings of the IEEE International Conference on Computer Vision a
 
 year      : 2016
 
+**Newest result**
+
+* color pointcloud  
+![color.png](https://github.com/StarRealMan/StarNet/blob/main/images/color.png?raw=true)
+* ground truth  
+![gt.png](https://github.com/StarRealMan/StarNet/blob/main/images/gt.png?raw=true)
+* net test result using Area_5 and a net trained 300 epoches  
+![test.png](https://github.com/StarRealMan/StarNet/blob/main/images/test.png?raw=true)
+
 ## REMEMBER!
 Do not try use point num more than 4096 or batch size more than 32 to train sceneseg  
 if your GPU memory is less than 12 GB 

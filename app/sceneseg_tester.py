@@ -1,5 +1,6 @@
 import sys
 sys.path.append("..")
+import os
 import torch
 import argparse
 
@@ -29,8 +30,10 @@ model = StarNet.SceneSegNet(num_classes)
 model.load_state_dict(torch.load('../model/'+opt.model))
 print('Use model from ../model/' + opt.model)
 
-IOU = []
+if not os.path.exists('../data/savings/'+str(opt.testarea)+'_TEST/'):
+    os.makedirs('../data/savings/'+str(opt.testarea)+'_TEST/')
 
+IOU = []
 with torch.no_grad():
     for i, data in enumerate(testdataloader):
         points, label = data
@@ -44,8 +47,8 @@ with torch.no_grad():
         label = label.view(-1)
         
         IOU.append(visualizer.calIOU(pred, label))
-        visualizer.MakePCD(points, pred, str(i)+opt.outn)
-        print('saving visualization file' + str(i) + '_' + opt.outn)
+        visualizer.MakePCD(points, pred, str(opt.testarea) + '_TEST/' + str(i) + '_' + opt.outn)
+        print('saving visualization file ' + str(i) + '_' + opt.outn)
         
 print('test data iou is as followed:')
 print(IOU)
