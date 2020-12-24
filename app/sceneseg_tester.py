@@ -51,4 +51,7 @@ with torch.no_grad():
         print('saving visualization file ' + str(i) + '_' + opt.outn)
         
 print('test data iou is as followed:')
-print(IOU)
+
+for i, iou in enumerate(IOU):
+    print('IOU of room No.%d: %s is %f' % (i, test_dataset.room_names[i], iou))
+    
