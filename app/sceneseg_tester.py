@@ -10,7 +10,7 @@ from app import visualizer
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default='../data/Stanford3dDataset_v1.2_Aligned_Version', help='dataset path')
-parser.add_argument('--model', type=str, default='model.pt', help='history model path')
+parser.add_argument('--model', type=str, default='Smodel.pt', help='history model path')
 parser.add_argument('--pointnum', type=int, default=4096, help='points per room/sample')
 parser.add_argument('--subscale', type=float, default=0.5, help='Dataset subsample before training')
 parser.add_argument('--outn', type=str, default='test.pcd', help='output file name')
