@@ -56,15 +56,17 @@ optimizer = torch.optim.Adam(model.parameters(),lr=0.0001,betas=(0.9, 0.999))
 
 for epoch in tqdm(range(opt.nepoch)):
     for i, data in tqdm(enumerate(traindataloader)):
-        # out put data size : [BatchSize PointNum PointChannel(XYZRGB)]
+        # out put data size : [BatchSize Channel(RGB or Depth) Image_Height Image_Width]
         rgb, depth, label = data
         rgb, depth, label = rgb.to(device=device, dtype=torch.float), depth.to(device=device, dtype=torch.float),\
                                                                       label.to(device)
         optimizer.zero_grad()
         model = model.train()
         # rgb, depth pre process
-        result = 
+        result = torch.cat((rgb,depth), 1)
         pred = model(result)
+        pred = pred.transpose(2, 1)
+        pred = pred.transpose(3, 2)
         pred = pred.view(-1, num_classes)
         label = label.view(-1)
         loss = F.nll_loss(pred, label)

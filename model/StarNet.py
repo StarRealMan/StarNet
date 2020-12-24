@@ -35,7 +35,8 @@ class TransNet(nn.Module):
         x = F.relu(self.bn5(self.fc2(x)))
         x = self.fc3(x)
 
-        iden = autograd.Variable(torch.from_numpy(np.array([1,0,0,0,1,0,0,0,1]).astype(np.float32))).view(1,9).repeat(batchsize,1)
+        iden = autograd.Variable(torch.from_numpy(np.array([1,0,0,0,1,0,0,0,1]).astype(np.float32)))\
+                                .view(1,9).repeat(batchsize,1)
         if x.is_cuda:
             iden = iden.cuda()
         x = x + iden
@@ -95,23 +96,57 @@ class SceneSegNet(nn.Module):
         x = x.transpose(2,1).contiguous()
         x = F.log_softmax(x.view(-1,self.class_num), dim=-1)
         x = x.view(batchsize, n_pts, self.class_num)
+
+    # onput x size : [BatchSize PointNum ClassNum]
         return x
 
 
 class FrameSegNet(nn.Module):
 
-    def __init__(self, num_class):
+    def __init__(self, class_num):
         super(FrameSegNet, self).__init__()
 
-    # input x size : [BatchSize ]
-    def forward(self, x):
-        
-        return x
+        self.class_num = class_num
+        self.conv1 = torch.nn.Conv2d(4, 48, 5, padding=2)
+        self.conv2 = torch.nn.Conv2d(48, 128, 3, padding=1)
+        self.conv3 = torch.nn.Conv2d(128, 192, 3, padding=1)
+        self.deconv1 = torch.nn.ConvTranspose2d(192, 128, 3, stride=2, padding=1, output_padding=1)
+        self.deconv2 = torch.nn.ConvTranspose2d(128, 48, 3, stride=2, padding=1, output_padding=1)
+        self.deconv3 = torch.nn.ConvTranspose2d(48, self.class_num, 3, stride=2, padding=1, output_padding=1)
+        self.pool = torch.nn.MaxPool2d(2,2)
+        self.relu = nn.ReLU()
 
+        self.bn1 = nn.BatchNorm2d(48)
+        self.bn2 = nn.BatchNorm2d(128)
+        self.bn3 = nn.BatchNorm2d(192)
+        self.bn4 = nn.BatchNorm2d(128)
+        self.bn5 = nn.BatchNorm2d(48)
+
+    # input x size : [BatchSize Channel(Processed: 4) Image_Height Image_Width]
+    def forward(self, x):
+                                                                        # Image Size : 240 x 320 (Initial)
+        xlevel1 = self.pool(self.relu(self.bn1(self.conv1(x))))         # Image Size : 120 x 160
+        xlevel2 = self.pool(self.relu(self.bn2(self.conv2(xlevel1))))   # Image Size : 60 x 80
+        xlevel3 = self.pool(self.relu(self.bn3(self.conv3(xlevel2))))   # Image Size : 30 x 40
+        sumlevel2 = self.relu(self.bn4(self.deconv1(xlevel3))) + xlevel2
+        sumlevel1 = self.relu(self.bn5(self.deconv2(sumlevel2))) + xlevel1
+        outx = self.relu(self.deconv3(sumlevel1))
+
+    # onput x size : [BatchSize ClassNum Image_Height Image_Width]
+        return outx
 
 
 if __name__ == '__main__':
-    net = SceneSegNet(14)
+
+    # net = SceneSegNet(14)
+    # print(net)
+    # rand = torch.randn(2, 6, 4096)
+    # result = net(rand)
+    # print(result)
+    # print(result.shape)
+
+    net = FrameSegNet(14)
     print(net)
-    rand = torch.randn(2,6,4096)
-    print(net(rand))
+    rand = torch.randn(2, 4, 240, 320)
+    result = net(rand)
+    print(result)

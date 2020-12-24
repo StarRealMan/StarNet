@@ -14,8 +14,9 @@ from app import dataloader
 
 
 class S3DISDataset(data.Dataset):
-    def __init__(self, root_d, pointnum , Area_code = 5, split = 'train'):
+    def __init__(self, root_d, pointnum , subsamplescale = 0.5, Area_code = 5, split = 'train'):
         self.pointnum = pointnum
+        self.subsamplescale = subsamplescale
         self.room_names = []
         self.label_names = ['ceiling','floor','wall','beam','column','window','door',\
                             'stairs','table','chair','sofa','bookcase','board','clutter']
@@ -69,11 +70,17 @@ class S3DISDataset(data.Dataset):
                                     
                                     room_data.append(line_data)
                                     room_label.append(self.label_codes[label_name])
-                                    
+
                     np_room_data = np.array(room_data)
                     np_room_label = np.array(room_label)
                     self.points.append(np_room_data)
                     self.label.append(np_room_label)
+
+                    #if you lack memory, try subsample before training
+                    choice_before = np.random.choice(range(len(np_room_data)),\
+                                                     int(len(np_room_data) * self.subsamplescale))
+                    self.points.achoice_beforeppend(np_room_data[choice_before, :])
+                    self.label.append(np_room_label[choice_before])
 
     # out put data size : [BatchSize PointNum PointChannel(XYZRGB)]
     def __getitem__(self, index):
@@ -102,8 +109,8 @@ class SUNRGBDDataset(data.Dataset):
         print('loading '+split+'_dataset rgb image')
         for root,dirs,files in os.walk(root_d+'/'+split+'_dataset/rgb'):
             for file in files:
-                rgb_image = cv2.imread(root_d+'/'+split+'_dataset/rgb/'+file, cv2.IMREAD_COLOR)      # shape : 530(H)*730(W)*3(C)
-                rgb_image = cv2.resize(rgb_image,(320,240), cv2.INTER_NEAREST)
+                rgb_image = cv2.imread(root_d+'/'+split+'_dataset/rgb/'+file, cv2.IMREAD_COLOR) # shape : 530(H)*730(W)*3(C)
+                rgb_image = cv2.resize(rgb_image, (320,240), cv2.INTER_NEAREST)
                 rgb_image = rgb_image.transpose((2,0,1))
                 self.rgbdata.append(rgb_image)
 
@@ -111,16 +118,16 @@ class SUNRGBDDataset(data.Dataset):
         for root,dirs,files in os.walk(root_d+'/'+split+'_dataset/depth'):
             for file in files:
                 d_image = cv2.imread(root_d+'/'+split+'_dataset/depth/'+file, cv2.IMREAD_GRAYSCALE) # shape : 530(H)*730(W)
-                d_image = cv2.resize(d_image,(320,240), cv2.INTER_NEAREST)
-                d_image = d_image.reshape(1,d_image.shape[0],d_image.shape[1])
+                d_image = cv2.resize(d_image, (320,240), cv2.INTER_NEAREST)
+                d_image = d_image.reshape(1, d_image.shape[0], d_image.shape[1])
                 self.depthdata.append(d_image)
 
         print('loading '+split+'_dataset label image')
         for root,dirs,files in os.walk(root_d+'/'+split+'_labels'):
             for file in files:
                 label = cv2.imread(root_d+'/'+split+'_labels/'+file, cv2.IMREAD_GRAYSCALE)          # shape : 530(H)*730(W)
-                label = cv2.resize(label,(320,240), cv2.INTER_NEAREST)
-                label = label.reshape(1,label.shape[0],label.shape[1])
+                label = cv2.resize(label, (320,240), cv2.INTER_NEAREST)
+                label = label.reshape(1, label.shape[0], label.shape[1])
                 self.labels.append(label)
 
 
@@ -139,7 +146,7 @@ class SUNRGBDDataset(data.Dataset):
 
 
 def GenGroundTruth(pointnum, testarea):
-    test_dataset = S3DISDataset('../data/Stanford3dDataset_v1.2_Aligned_Version', pointnum, testarea, split = 'test')
+    test_dataset = S3DISDataset('../data/Stanford3dDataset_v1.2_Aligned_Version', pointnum, 0.5, testarea, split = 'test')
     testdataloader = torch.utils.data.DataLoader(test_dataset, shuffle=False, batch_size = 1,\
                                                 num_workers=8, drop_last=False)
 
@@ -176,10 +183,11 @@ if __name__ == '__main__':
         print(rgb)
         print(depth)
         print(label)
+        print(label.shape)
         break;
 
-    rgb, depth, label = dataset.__getitem__(0)
-    print(rgb)
-    print(depth)
-    print(label)
-    print(len(dataset))
+    # rgb, depth, label = dataset.__getitem__(0)
+    # print(rgb)
+    # print(depth)
+    # print(label)
+    # print(len(dataset))
