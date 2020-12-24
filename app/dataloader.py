@@ -152,7 +152,7 @@ def GenGroundTruth(pointnum, testarea):
         points = points.view(-1,6)[:, :3]
         label = label.view(-1)
         
-        visualizer.MakePCD(points, label, str(testarea)+'_GT/'+str(i)+'gt.pcd')
+        visualizer.MakePCD(points, label, str(testarea) + '_GT/' + str(i) + '_' + 'gt.pcd')
         print('saving visualization file in ' + str(testarea)+ '_GT/' + str(i) + '_' + 'gt.pcd')
     
 
@@ -166,20 +166,20 @@ def GenGroundTruth(pointnum, testarea):
 
 if __name__ == '__main__':
 
-    #  GenGroundTruth(8192, 1)
+    GenGroundTruth(8192, 5)
     
-    dataset = SUNRGBDDataset('../data/SUNRGBD', 'train')
-    dataloader = torch.utils.data.DataLoader(dataset, shuffle=True, batch_size=1,\
-                                             num_workers=8, drop_last=True)
-    for i, data in enumerate(dataloader):
-        rgb,depth,label = data
-        print(rgb)
-        print(depth)
-        print(label)
-        break;
+    # dataset = SUNRGBDDataset('../data/SUNRGBD', 'train')
+    # dataloader = torch.utils.data.DataLoader(dataset, shuffle=True, batch_size=1,\
+    #                                          num_workers=8, drop_last=True)
+    # for i, data in enumerate(dataloader):
+    #     rgb,depth,label = data
+    #     print(rgb)
+    #     print(depth)
+    #     print(label)
+    #     break;
 
-    rgb, depth, label = dataset.__getitem__(0)
-    print(rgb)
-    print(depth)
-    print(label)
-    print(len(dataset))
+    # rgb, depth, label = dataset.__getitem__(0)
+    # print(rgb)
+    # print(depth)
+    # print(label)
+    # print(len(dataset))

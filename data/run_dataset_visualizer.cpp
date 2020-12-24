@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 
     std::string line;
     float pos;
-    unsigned int color;
+    float color;
     pcl::PointXYZRGB point;
     float midpoint[3] = {0};
     std::vector<pcl::PointXYZRGB> PointVec;
@@ -52,11 +52,11 @@ int main(int argc, char* argv[])
         lineinput >> pos;
         point.z = pos;
         lineinput >> color;
-        point.r = color;
+        point.r = int(color);
         lineinput >> color;
-        point.g = color;
+        point.g = int(color);
         lineinput >> color;
-        point.b = color;
+        point.b = int(color);
 
         PointVec.push_back(point);
 
