@@ -26,7 +26,9 @@ year      : 2016
 
 ## REMEMBER!
 Do not try use point num more than 4096 or batch size more than 32 to train sceneseg  
-if your GPU memory is less than 12 GB 
+if your GPU memory is less than 12 GB  
+Loading data of 5 Areas may take memory around 18 GB,  
+if you lack memory, you can subsample before training by using --subscale
 
 ## Requirement
 * Pytorch:<https://pytorch.org/>
@@ -86,6 +88,7 @@ python frame_train.py [optins]
 option include:
 --batchsize for input batch size  
 --pointnum for points per room/sample  
+--subscale for Dataset subsample before training  
 --nepoch for number of epochs to train for  
 --dataset for dataset path  
 --outn for output model name  
@@ -103,6 +106,7 @@ option include:
 --dataset for dataset path  
 --model for history model path  
 --pointnum for points per room/sample  
+--subscale for Dataset subsample before training  
 --outn for output file name  
 --workers for number of workers to load data  
 --testarea for Area you want to test with (skip while training)

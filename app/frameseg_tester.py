@@ -34,7 +34,7 @@ with torch.no_grad():
         rgb, depth = rgb.to(dtype=torch.float), depth.to(dtype=torch.float)
         model = model.eval()
         # rgb, depth pre process
-        result = 
+        result = torch.cat((rgb,rgb), 1)
         pred = model(result)
         pred = pred.view(-1, num_classes)
         label = label.view(-1)
