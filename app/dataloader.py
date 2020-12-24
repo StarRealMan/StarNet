@@ -79,7 +79,7 @@ class S3DISDataset(data.Dataset):
                     #if you lack memory, try subsample before training
                     choice_before = np.random.choice(range(len(np_room_data)),\
                                                      int(len(np_room_data) * self.subsamplescale))
-                    self.points.achoice_beforeppend(np_room_data[choice_before, :])
+                    self.points.append(np_room_data[choice_before, :])
                     self.label.append(np_room_label[choice_before])
 
     # out put data size : [BatchSize PointNum PointChannel(XYZRGB)]
