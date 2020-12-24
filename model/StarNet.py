@@ -124,13 +124,13 @@ class FrameSegNet(nn.Module):
 
     # input x size : [BatchSize Channel(Processed: 4) Image_Height Image_Width]
     def forward(self, x):
-                                                                        # Image Size : 240 x 320 (Initial)
-        xlevel1 = self.pool(self.relu(self.bn1(self.conv1(x))))         # Image Size : 120 x 160
-        xlevel2 = self.pool(self.relu(self.bn2(self.conv2(xlevel1))))   # Image Size : 60 x 80
-        xlevel3 = self.pool(self.relu(self.bn3(self.conv3(xlevel2))))   # Image Size : 30 x 40
-        sumlevel2 = self.relu(self.bn4(self.deconv1(xlevel3))) + xlevel2
-        sumlevel1 = self.relu(self.bn5(self.deconv2(sumlevel2))) + xlevel1
-        outx = self.relu(self.deconv3(sumlevel1))
+                                                                            # Image Size : 240 x 320 (Initial)
+        xlevel1 = self.pool(self.relu(self.bn1(self.conv1(x))))             # Image Size : 120 x 160
+        xlevel2 = self.pool(self.relu(self.bn2(self.conv2(xlevel1))))       # Image Size : 60 x 80
+        xlevel3 = self.pool(self.relu(self.bn3(self.conv3(xlevel2))))       # Image Size : 30 x 40
+        sumlevel2 = self.relu(self.bn4(self.deconv1(xlevel3))) + xlevel2    # Image Size : 60 x 80
+        sumlevel1 = self.relu(self.bn5(self.deconv2(sumlevel2))) + xlevel1  # Image Size : 120 x 160
+        outx = self.relu(self.deconv3(sumlevel1))                           # Image Size : 240 x 320
 
     # onput x size : [BatchSize ClassNum Image_Height Image_Width]
         return outx
