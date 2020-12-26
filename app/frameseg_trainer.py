@@ -57,7 +57,7 @@ sum_loss = 0
 
 for epoch in tqdm(range(opt.nepoch)):
     for i, data in tqdm(enumerate(traindataloader)):
-        # out put data size : [BatchSize Channel(RGB or Depth) Image_Height Image_Width]
+        # out put data size : [BatchSize Channel(RGB or Depth or Label) Image_Height Image_Width]
         rgb, depth, label = data
         rgb, depth, label = rgb.to(device=device, dtype=torch.float), depth.to(device=device, dtype=torch.float),\
                                                                       label.to(device=device, dtype=torch.long)
@@ -68,9 +68,7 @@ for epoch in tqdm(range(opt.nepoch)):
         # rgb, depth pre process
         result = torch.cat((rgb,depth), 1)
         pred = model(result)
-        pred = pred.transpose(2, 1).transpose(3, 2).contiguous()
-        pred = pred.view(-1, num_classes)
-        label = label.view(-1)
+        label = label.squeeze(1)
         loss = F.nll_loss(pred, label)
         loss.backward()
         optimizer.step()

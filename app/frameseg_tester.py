@@ -43,6 +43,7 @@ with torch.no_grad():
         result = torch.cat((rgb,rgb), 1)
         pred = model(result)
         ioupred = pred.transpose(2, 1).transpose(3, 2).contiguous()
+        label = label.transpose(2, 1).transpose(3, 2).contiguous()
         ioupred = ioupred.view(-1, num_classes)
         label = label.view(-1)
         IOU.append(visualizer.calIOU(pred, label))
