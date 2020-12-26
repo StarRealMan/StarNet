@@ -131,7 +131,7 @@ class SUNRGBDDataset(data.Dataset):
                 self.labels.append(label)
 
 
-    # out put data size : [BatchSize Channel(RGB or Depth) Image_Height Image_Width]
+    # out put data size : [BatchSize Channel(RGB or Depth or Label) Image_Height Image_Width]
     def __getitem__(self, index):
 
         rgb = self.rgbdata[index]
@@ -176,7 +176,7 @@ if __name__ == '__main__':
     # GenGroundTruth(8192, 5)
     
     dataset = SUNRGBDDataset('../data/SUNRGBD', 'train')
-    dataloader = torch.utils.data.DataLoader(dataset, shuffle=True, batch_size=1,\
+    dataloader = torch.utils.data.DataLoader(dataset, shuffle=True, batch_size=2,\
                                              num_workers=8, drop_last=True)
     for i, data in enumerate(dataloader):
         rgb,depth,label = data
