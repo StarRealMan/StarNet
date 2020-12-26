@@ -117,8 +117,8 @@ option include:
 * Using tensorboard (logdir = /log) to watch the loss curve
 
 ## Bug
-Error when using test app. It predict all the pointto be 'sofa'(class 11)  
-Using model trained Dec.22, 300 epoch with all Area.
+Frame Seg Net convergence slow,  
+Need test.
 
 ## Author
 
