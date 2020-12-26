@@ -117,7 +117,7 @@ option include:
 * Using tensorboard (logdir = /log) to watch the loss curve
 
 ## Bug
-Frame Seg Net convergence slow,  
+Frame Seg Net convergence slow, maybe Net structure failed.  
 Need test.
 
 ## Author
