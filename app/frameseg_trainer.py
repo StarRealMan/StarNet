@@ -53,6 +53,7 @@ else:
 
 model.to(device)
 optimizer = torch.optim.Adam(model.parameters(),lr=0.0001,betas=(0.9, 0.999))
+sum_loss = 0
 
 for epoch in tqdm(range(opt.nepoch)):
     for i, data in tqdm(enumerate(traindataloader)):
@@ -73,8 +74,12 @@ for epoch in tqdm(range(opt.nepoch)):
         loss = F.nll_loss(pred, label)
         loss.backward()
         optimizer.step()
-        # testdata
-        print('[ epoch: %d/%d  batch: %d/%d ]  loss: %f' % (epoch, opt.nepoch, i+1, batch_num, loss.item()))
+        sum_loss = sum_loss + loss.item()
+        if i % 10 == 9:
+            # testdata
+            print('[ epoch: %d/%d  batch: %d/%d ]  loss: %f' % (epoch, opt.nepoch, i+1, batch_num, sum_loss/10))
+            sum_loss = 0
+
         # dataplotter.DataloadY(loss.item())
         # dataplotter.DataPlot()
         writer.add_scalar('training loss', loss.item(), epoch*len(traindataloader)+i)
