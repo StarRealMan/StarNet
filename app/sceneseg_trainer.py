@@ -76,5 +76,9 @@ for epoch in tqdm(range(opt.nepoch)):
         # dataplotter.DataPlot()
         writer.add_scalar('training loss', loss.item(), epoch*len(traindataloader)+i)
 
-torch.save(model.state_dict(), '../model/' + opt.outn)
-print('Model saved at ../model/' + opt.outn)
+    if epoch % 50 == 49:
+        torch.save(model.state_dict(), '../model/Smodel/epo' + str(epoch) + opt.outn)
+        print('Model saved at ../model/Smodel/epo' + str(epoch) + opt.outn)
+
+torch.save(model.state_dict(), '../model/Smodel/final_' + opt.outn)
+print('Model saved at ../model/Smodel/final_' + opt.outn)
