@@ -16,9 +16,12 @@ int main(int argc, char** argv)
     }
 
     char image_num[8];
+    char image_num_eval[8];
     std::string file_name = "../SUNRGBD/";
     sprintf(image_num, "%06d", std::stoi(argv[2]));
     std::string image_str = image_num;
+    sprintf(image_num_eval, "%d", std::stoi(argv[2]));
+    std::string image_str_eval = image_num_eval;
 
     if(!strcmp(argv[1],"test"))
     {
@@ -30,7 +33,8 @@ int main(int argc, char** argv)
     }
     else
     {
-        file_name = './savings/F_TEST/'+std::stoi(argv[2])+'_test.jpg';
+        file_name = "../savings/F_TEST/" + image_str_eval + "_test.jpg";
+        std::cout << file_name << std::endl;
     }
     
     cv::Mat label_pic = cv::imread(file_name, cv::IMREAD_GRAYSCALE);
