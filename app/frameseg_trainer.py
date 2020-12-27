@@ -13,7 +13,7 @@ from app import visualizer
 parser = argparse.ArgumentParser()
 parser.add_argument('--batchsize', type=int, default=8, help='input batch size')
 parser.add_argument('--nepoch', type=int, default=8, help='number of epochs to train for')
-parser.add_argument('--dataset', type=str, default='../data/SUNRGBD', help='dataset patH')
+parser.add_argument('--dataset', type=str, default='../data/SUNRGBD', help='dataset path')
 parser.add_argument('--outn', type=str, default='Fmodel.pt', help='output model name')
 parser.add_argument('--model', type=str, default='None', help='history model path')
 parser.add_argument('--workers', type=int, default=2, help='number of workers to load data')
@@ -86,5 +86,5 @@ for epoch in tqdm(range(opt.nepoch)):
         torch.save(model.state_dict(), '../model/Smodel/epo' + str(epoch) + opt.outn)
         print('Model saved at ../model/Smodel/epo' + str(epoch) + opt.outn)
 
-torch.save(model.state_dict(), '../model/Smodel/final_' + opt.outn)
-print('Model saved at ../model/Smodel/final_' + opt.outn)
+torch.save(model.state_dict(), '../model/Fmodel/final_' + opt.outn)
+print('Model saved at ../model/Fmodel/final_' + opt.outn)
