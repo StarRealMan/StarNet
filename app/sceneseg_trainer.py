@@ -1,5 +1,6 @@
 import sys
 sys.path.append("..")
+import os
 import torch
 import torch.nn.functional as F
 from torch.utils.tensorboard import SummaryWriter
@@ -52,6 +53,9 @@ if opt.model != 'None':
     print('Use model from ../model/' + opt.model)
 else:
     print('Use new model')
+
+if not os.path.exists('../model/Smodel'):
+    os.makedirs('../model/Smodel')
 
 model.to(device)
 optimizer = torch.optim.Adam(model.parameters(),lr=0.0001,betas=(0.9, 0.999))
