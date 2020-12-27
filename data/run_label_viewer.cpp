@@ -17,17 +17,18 @@ int main(int argc, char** argv)
 
     char image_num[8];
     char image_num_eval[8];
+
     std::string file_name = "../SUNRGBD/";
     sprintf(image_num, "%06d", std::stoi(argv[2]));
     std::string image_str = image_num;
     sprintf(image_num_eval, "%d", std::stoi(argv[2]));
     std::string image_str_eval = image_num_eval;
 
-    if(!strcmp(argv[1],"test"))
+    if(!strcmp(argv[1], "test"))
     {
         file_name += "test_labels/img13labels-" + image_str + ".png";
     }
-    else if(!strcmp(argv[1],"train"))
+    else if(!strcmp(argv[1], "train"))
     {
         file_name += "train_labels/img13labels-" + image_str + ".png";
     }
@@ -40,9 +41,9 @@ int main(int argc, char** argv)
     cv::Mat label_pic = cv::imread(file_name, cv::IMREAD_GRAYSCALE);
     cv::Mat show_pic(label_pic.rows, label_pic.cols, CV_8UC3);
 
-    for(int i=0;i<show_pic.rows;i++)  
+    for(int i=0; i<show_pic.rows; i++)  
     {  
-        for(int j=0;j<show_pic.cols;j++)  
+        for(int j=0; j<show_pic.cols; j++)  
         {
             cv::Vec3b color;
             color = Num2Color(label_pic.at<uchar>(i,j));
@@ -52,23 +53,23 @@ int main(int argc, char** argv)
 
     cv::Mat RGB,Depth;
 
-    if(!strcmp(argv[1],"test"))
+    if(!strcmp(argv[1], "test"))
     {
         RGB = cv::imread("../SUNRGBD/test_dataset/rgb/img-" + image_str + ".jpg");
         image_str = argv[2];
         Depth = cv::imread("../SUNRGBD/test_dataset/depth/" + image_str + ".png");
     }
-    else if(!strcmp(argv[1],"train"))
+    else if(!strcmp(argv[1], "train"))
     {
         RGB = cv::imread("../SUNRGBD/train_dataset/rgb/img-" + image_str + ".jpg");
         image_str = argv[2];
         Depth = cv::imread("../SUNRGBD/train_dataset/depth/" + image_str + ".png");
     }
 
-    if(strcmp(argv[1],"eval"))
+    if(strcmp(argv[1], "eval"))
     {
         cv::imshow("RGB", RGB);
-        cv::imshow("Depth",Depth);
+        cv::imshow("Depth", Depth);
     }
     cv::imshow("Label", show_pic);
 
