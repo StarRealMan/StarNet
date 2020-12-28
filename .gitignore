@@ -142,5 +142,5 @@ dmypy.json
 /log/*
 /.ipynb_checkpoints
 /model/*.pt
-/mdoel/Smodel/*
-/mdoel/Fmodel/*
+/model/Smodel/*
+/model/Fmodel/*
