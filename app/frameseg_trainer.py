@@ -87,8 +87,8 @@ for epoch in tqdm(range(opt.nepoch)):
         writer.add_scalar('training loss', loss.item(), epoch*len(traindataloader)+i)
 
     if epoch % 50 == 49:
-        torch.save(model.state_dict(), '../model/Fmodel/epo' + str(epoch) + opt.outn)
-        print('Model saved at ../model/Fmodel/epo' + str(epoch) + opt.outn)
+        torch.save(model.state_dict(), '../model/Fmodel/epo' + str(epoch+1) + opt.outn)
+        print('Model saved at ../model/Fmodel/epo' + str(epoch+1) + opt.outn)
 
 torch.save(model.state_dict(), '../model/Fmodel/final_' + opt.outn)
 print('Model saved at ../model/Fmodel/final_' + opt.outn)

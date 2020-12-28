@@ -19,7 +19,7 @@ int main(int argc, char** argv)
     char image_num_eval[8];
 
     std::string file_name = "../SUNRGBD/";
-    sprintf(image_num, "%06d", std::stoi(argv[2]));
+    sprintf(image_num, "%06d", std::stoi(argv[2]-1));
     std::string image_str = image_num;
     sprintf(image_num_eval, "%d", std::stoi(argv[2]));
     std::string image_str_eval = image_num_eval;
