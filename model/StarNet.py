@@ -100,97 +100,79 @@ class SceneSegNet(nn.Module):
     # onput x size : [BatchSize PointNum ClassNum]
         return x
 
-
-class FrameSegNet(nn.Module):
-
-    def __init__(self, class_num):
-        super(FrameSegNet, self).__init__()
-
-        self.class_num = class_num
-        self.conv1_1 = nn.Conv2d(4, 64, 3, padding=1)
-        self.bn1_1 = nn.BatchNorm2d(64)
-        self.conv1_2 = nn.Conv2d(64, 64, 3, padding=1)
-        self.bn1_2 = nn.BatchNorm2d(64)
-
-        self.conv2_1 = nn.Conv2d(64, 128, 3, padding=1)
-        self.bn2_1 = nn.BatchNorm2d(128)
-        self.conv2_2 = nn.Conv2d(128, 128, 3, padding=1)
-        self.bn2_2 = nn.BatchNorm2d(128)
+class Conv_BN(nn.Module):
+    def __init__(self, in_chans, out_chans, padding, batch_norm):
+        super(Conv_BN, self).__init__()
+        self.batch_norm = batch_norm
+        self.myConv1 = nn.Conv2d(in_chans, out_chans, kernel_size=3, padding=padding)
+        self.myBN1 = nn.BatchNorm2d(out_chans)
+        self.myConv2 = nn.Conv2d(out_chans, out_chans, kernel_size=3, padding=padding)
+        self.myBN2 = nn.BatchNorm2d(out_chans)
         
-        self.conv3_1 = nn.Conv2d(128, 256, 3, padding=1)
-        self.bn3_1 = nn.BatchNorm2d(256)
-        self.conv3_2 = nn.Conv2d(256, 256, 3, padding=1)
-        self.bn3_2 = nn.BatchNorm2d(256)
-
-        self.conv4_1 = nn.Conv2d(256, 512, 3, padding=1)
-        self.bn4_1 = nn.BatchNorm2d(512)
-        self.conv4_2 = nn.Conv2d(512, 512, 3, padding=1)
-        self.bn4_2 = nn.BatchNorm2d(512)
-
-        self.conv5_1 = nn.Conv2d(512, 512, 3, padding=1)
-        self.bn5_1 = nn.BatchNorm2d(512)
-        self.conv5_2 = nn.Conv2d(512, 512, 3, padding=1)
-        self.bn5_2 = nn.BatchNorm2d(512)
-        self.conv5_3 = nn.Conv2d(512, 512, 3, padding=1)
-        self.bn5_3 = nn.BatchNorm2d(512)
-        
-        self.conv6_1 = nn.Conv2d(512, self.class_num, 1)
-
-        self.conv6_2 = nn.Conv2d(512, self.class_num, 1)
-        self.deconv1 = nn.ConvTranspose2d(self.class_num, self.class_num, 4, stride=2, padding=1, bias=False)
-
-        self.conv6_3 = nn.Conv2d(256, self.class_num, 1)
-        self.deconv2 = nn.ConvTranspose2d(self.class_num, self.class_num, 4, stride=2, padding=1, bias=False)
-
-        self.deconv3 = nn.ConvTranspose2d(self.class_num, self.class_num, 8, stride=4, padding=2, bias=False)
-
-        self.pool = nn.MaxPool2d(2,2)
-        self.relu = nn.ReLU(inplace=True)
-
-        
-
-
-    # input x size : [BatchSize Channel(Processed: 4) Image_Height Image_Width]
     def forward(self, x):
+        x = self.myConv1(x)
+        x = F.relu(x)
+        if self.batch_norm:
+            x = self.myBN1(x)
+        x = self.myConv2(x)
+        x = F.relu(x)
+        if self.batch_norm:
+            x = self.myBN2(x)
 
-        x = self.relu(self.bn1_1(self.conv1_1(x )))       
-        x = self.relu(self.bn1_2(self.conv1_2(x )))
-                                                        # Image Size : 240 x 320, channel : 64
-        x = self.relu(self.bn2_1(self.conv2_1(x )))
-        x = self.relu(self.bn2_2(self.conv2_2(x )))
-        x = self.pool(x)                                # Image Size : 120 x 160, channel : 128
-
-        x = self.relu(self.bn3_1(self.conv3_1(x)))
-        x = self.relu(self.bn3_2(self.conv3_2(x)))
-        x = self.pool(x)
-        xlevel1_4 = x                                   # Image Size : 60 x 80, channel : 256
-
-        x = self.relu(self.bn4_1(self.conv4_1(x)))
-        x = self.relu(self.bn4_2(self.conv4_2(x)))
-        x = self.pool(x)
-        xlevel1_8 = x                                   # Image Size : 30 x 40, channel : 512
-
-        x = self.relu(self.bn5_1(self.conv5_1(x)))
-        x = self.relu(self.bn5_2(self.conv5_2(x)))
-        x = self.relu(self.bn5_3(self.conv5_3(x)))
-        x = self.pool(x)
-        xlevel1_16 = x                                  # Image Size : 15 x 20, channel : 512
-
-        x = self.conv6_1(xlevel1_16)
-
-        xlevel1_8 = self.conv6_2(xlevel1_8)
-        x = self.relu(self.deconv1(x)) + xlevel1_8      # Image Size : 30 x 40, channel : num_class
-
-        xlevel1_4 = self.conv6_3(xlevel1_4)
-        x = self.relu(self.deconv2(x)) + xlevel1_4      # Image Size : 60 x 80, channel : num_class
-
-        x = self.deconv3(x)                             # Image Size : 240 x 320, channel : num_class
-
-        x = F.log_softmax(x, dim=1)
-
-    # onput x size : [BatchSize ClassNum Image_Height Image_Width]
         return x
 
+class Deconv_Upsample(nn.Module):
+    def __init__(self, in_chans, out_chans, padding, batch_norm):
+        super(Deconv_Upsample, self).__init__()
+        self.myDeconv = nn.ConvTranspose2d(in_chans, out_chans, kernel_size=2, stride=2)
+        self.myConv_BN = Conv_BN(in_chans, out_chans, padding, batch_norm)
+
+    def crop(self, layer, target_size):
+        _,_,layer_height, layer_width = layer.shape
+        diff_y = (layer_height - target_size[0]) // 2
+        diff_x = (layer_width - target_size[1]) // 2
+        return layer[:, :, diff_y: (diff_y + target_size[0]), diff_x: (diff_x + target_size[1])]
+
+    def forward(self, x, bridge):
+        x = self.myDeconv(x)
+        crop = self.crop(bridge, x.shape[2:])
+        x = torch.cat([x, crop], 1)
+        x = self.myConv_BN(x)
+        return x
+
+
+
+class FrameSegNet(nn.Module):
+    def __init__(self,in_channels=4, n_classes=14, padding=False, batch_norm=False):
+        super(FrameSegNet, self).__init__()
+        self.padding = padding
+
+        self.Conv_BN1 = Conv_BN(in_channels, 128, padding, batch_norm)
+        self.Conv_BN2 = Conv_BN(128, 256, padding, batch_norm)
+        self.Conv_BN3 = Conv_BN(256, 512, padding, batch_norm)
+        self.Conv_BN4 = Conv_BN(512, 1024, padding, batch_norm)
+
+        self.Deconv1 = Deconv_Upsample(1024, 512, padding, batch_norm)
+        self.Deconv2 = Deconv_Upsample(512, 256, padding, batch_norm)
+        self.Deconv3 = Deconv_Upsample(256, 128, padding, batch_norm)
+
+        self.Last_Conv = nn.Conv2d(128, n_classes, kernel_size=1)
+        
+    def forward(self, inputs):
+        x1 = self.Conv_BN1(inputs)      # input = 320 * 240
+        x = F.max_pool2d(x1 ,2)
+        x2 = self.Conv_BN2(x)
+        x = F.max_pool2d(x2 ,2)
+        x3 = self.Conv_BN3(x)
+        x = F.max_pool2d(x3 ,2)
+        x = self.Conv_BN4(x)
+        x = self.Deconv1(x, x3)
+        x = self.Deconv2(x, x2)
+        x = self.Deconv3(x, x1)
+        x = self.Last_Conv(x)
+        x = F.log_softmax(x, 1)         # output = 228 * 148
+        
+        return x
 
 if __name__ == '__main__':
 
@@ -201,10 +183,10 @@ if __name__ == '__main__':
     # print(result)
     # print(result.shape)
 
-    net = FrameSegNet(14)
+    net = FrameSegNet()
     print(net)
     rand = torch.randn(2, 4, 240, 320)
-    result = net(rand)
-    print(result)
-    print(result.shape)
+    output = net(rand)
+    
+    print(output.shape)
     

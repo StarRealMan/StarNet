@@ -110,7 +110,7 @@ class SUNRGBDDataset(data.Dataset):
         for root,dirs,files in os.walk(root_d+'/'+split+'_dataset/rgb'):
             for file in files:
                 rgb_image = cv2.imread(root_d+'/'+split+'_dataset/rgb/'+file, cv2.IMREAD_COLOR) # shape : 530(H)*730(W)*3(C)
-                rgb_image = cv2.resize(rgb_image, (320,240), cv2.INTER_NEAREST)
+                rgb_image = cv2.resize(rgb_image, (320,240), cv2.INTER_LINEAR)
                 rgb_image = rgb_image.transpose((2,0,1))
                 self.rgbdata.append(rgb_image)
 
@@ -118,7 +118,7 @@ class SUNRGBDDataset(data.Dataset):
         for root,dirs,files in os.walk(root_d+'/'+split+'_dataset/depth'):
             for file in files:
                 d_image = cv2.imread(root_d+'/'+split+'_dataset/depth/'+file, cv2.IMREAD_GRAYSCALE) # shape : 530(H)*730(W)
-                d_image = cv2.resize(d_image, (320,240), cv2.INTER_NEAREST)
+                d_image = cv2.resize(d_image, (320,240), cv2.INTER_LINEAR)
                 d_image = d_image.reshape(1, d_image.shape[0], d_image.shape[1])
                 self.depthdata.append(d_image)
 
@@ -126,7 +126,7 @@ class SUNRGBDDataset(data.Dataset):
         for root,dirs,files in os.walk(root_d+'/'+split+'_labels'):
             for file in files:
                 label = cv2.imread(root_d+'/'+split+'_labels/'+file, cv2.IMREAD_GRAYSCALE)          # shape : 530(H)*730(W)
-                label = cv2.resize(label, (320,240), cv2.INTER_NEAREST)
+                label = cv2.resize(label, (228,148), cv2.INTER_NEAREST)
                 label = label.reshape(1, label.shape[0], label.shape[1])
                 self.labels.append(label)
 
