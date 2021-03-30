@@ -117,17 +117,6 @@ option include:
 * Using tensorboard (logdir = /log) to watch the loss curve
 
 ## Bug
-Frame Seg Net convergence slow, maybe Net structure failed.
-
-Need test.
-
-Frame Seg Failed
-
-1.阅读论文寻找合适的深度图像语义分割方法
-
-2.改进网络，训练，测试，并加入前端里程计
-
-3.实时性考量
 
 
 ## Author
